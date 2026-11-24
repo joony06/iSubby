@@ -1,0 +1,5 @@
+# 평문 자막은 절대 커밋하지 않기 (subs/ 에는 암호화된 .json만)
+*.srt
+*.vtt
+*.zip
+.DS_Store
