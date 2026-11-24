@@ -37,6 +37,9 @@
 
 ## 설치
 
+👉 **[설치 안내 페이지](https://joony06.github.io/iSubby/)** 에서 파일을 받고 단계별 안내를 따라 하세요.
+
+직접 설치하려면:
 1. 이 저장소를 내려받아 압축을 풉니다. (**Code → Download ZIP**)
 2. 크롬 주소창에 `chrome://extensions` 입력
 3. 우측 상단 **개발자 모드** 켜기
@@ -131,6 +134,8 @@ iSubby/
 ├── icons/          # 확장 아이콘 (16, 32, 48, 128px)
 ├── assets/         # README용 로고
 ├── subs/           # 암호화된 공유 자막 (.json)
+├── docs/           # 설치 안내 페이지 (GitHub Pages)와 다운로드용 zip
+├── ROADMAP.md      # 추가할 기능·보완점
 ├── LICENSE         # MIT 라이선스
 └── .gitignore      # 평문 자막(.srt, .vtt) 커밋 방지
 ```

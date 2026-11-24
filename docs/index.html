@@ -1,0 +1,328 @@
+<!doctype html>
+<!-- iSubby — Copyright (c) 2026 AePhroDeChi. MIT License. -->
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iSubby 설치하기</title>
+  <meta name="description" content="성균관대 iCampus(아캠) 강의 영상 위에 자막을 띄워주는 크롬 확장프로그램 iSubby 설치 안내" />
+  <link rel="icon" href="icon.png" />
+  <meta property="og:title" content="iSubby — 아캠 강의 자막 확장프로그램" />
+  <meta property="og:description" content="강의 영상 위에 자막을 바로. 설치 방법을 단계별로 안내해요." />
+  <meta property="og:image" content="https://joony06.github.io/iSubby/og.png" />
+  <style>
+    :root {
+      --bg: #ffffff; --soft: #f9fafb; --card: #f2f4f6; --line: #e5e8eb;
+      --text: #191f28; --sub: #4e5968; --hint: #8b95a1;
+      --blue: #3182f6; --blue-press: #1b64da; --blue-weak: #e8f3ff;
+      --mock: #ffffff; --mock-line: #dadce0; --mock-text: #202124;
+      --warn: #fff8e6; --warn-text: #8a5a00;
+      --shadow: 0 8px 28px rgba(0,0,0,.08);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #17171c; --soft: #1d1d23; --card: #24242b; --line: #2f2f38;
+        --text: #f2f4f6; --sub: #b0b8c1; --hint: #7e7e87;
+        --blue: #3182f6; --blue-press: #4593fc; --blue-weak: #1f2b3d;
+        --mock: #292a2d; --mock-line: #3c4043; --mock-text: #e8eaed;
+        --warn: #3a3020; --warn-text: #f5c86b;
+        --shadow: 0 8px 28px rgba(0,0,0,.4);
+      }
+      .logo-card { background: #fff; }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+      letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; word-break: keep-all;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+    code, kbd { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .9em; }
+    code { background: var(--card); padding: 2px 6px; border-radius: 6px; }
+
+    /* 상단 */
+    header { padding: 56px 0 40px; text-align: center; }
+    .logo-card { display: inline-block; border-radius: 16px; padding: 8px 14px; }
+    .logo-card img { display: block; width: 260px; max-width: 70vw; height: auto; }
+    header h1 { font-size: clamp(28px, 6vw, 40px); line-height: 1.3; margin: 24px 0 8px; font-weight: 800; letter-spacing: -0.02em; }
+    header p { color: var(--sub); margin: 0 0 28px; font-size: 17px; }
+    .cta { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      height: 56px; padding: 0 28px; border-radius: 16px; border: 0; cursor: pointer;
+      font: inherit; font-size: 17px; font-weight: 700; text-decoration: none !important;
+      transition: background .15s, transform .1s;
+    }
+    .btn:active { transform: scale(.98); }
+    .btn.primary { background: var(--blue); color: #fff; min-width: 280px; }
+    .btn.primary:hover { background: var(--blue-press); }
+    .btn.ghost { background: var(--card); color: var(--hint); height: 44px; font-size: 14px; cursor: default; }
+    .meta { font-size: 13px; color: var(--hint); }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 18px; }
+    .chip { font-size: 13px; color: var(--sub); background: var(--card); padding: 4px 10px; border-radius: 99px; }
+
+    /* 섹션 */
+    section { padding: 40px 0; border-top: 1px solid var(--line); }
+    h2 { font-size: 24px; margin: 0 0 8px; font-weight: 800; letter-spacing: -0.02em; }
+    .lead { color: var(--sub); margin: 0 0 28px; }
+
+    /* 단계 */
+    .step { display: grid; grid-template-columns: 40px 1fr; gap: 16px; margin-bottom: 36px; }
+    .num { width: 40px; height: 40px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 800; display: grid; place-items: center; }
+    .step h3 { margin: 6px 0 6px; font-size: 19px; }
+    .step p { margin: 0 0 12px; color: var(--sub); }
+    .tip { background: var(--soft); border-radius: 12px; padding: 12px 14px; font-size: 14px; color: var(--sub); margin-top: 10px; }
+    .warn { background: var(--warn); color: var(--warn-text); border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-top: 10px; }
+
+    /* 복사 박스 */
+    .copy { display: flex; align-items: center; gap: 8px; background: var(--card); border-radius: 12px; padding: 6px 6px 6px 14px; max-width: 420px; }
+    .copy code { background: none; padding: 0; flex: 1; font-size: 15px; }
+    .copy button { border: 0; background: var(--blue); color: #fff; font: inherit; font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 9px; cursor: pointer; }
+    .browsers { display: flex; gap: 6px; margin: 0 0 10px; }
+    .browsers button { border: 0; background: var(--card); color: var(--sub); font: inherit; font-size: 13px; padding: 5px 12px; border-radius: 99px; cursor: pointer; }
+    .browsers button[aria-pressed="true"] { background: var(--blue-weak); color: var(--blue); font-weight: 700; }
+
+    /* 화면 그림 (크롬 화면을 단순화한 모형) */
+    .mock {
+      background: var(--mock); color: var(--mock-text); border: 1px solid var(--mock-line); border-radius: 12px;
+      box-shadow: var(--shadow); overflow: hidden; font-size: 13px; max-width: 520px;
+    }
+    .mock .bar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--mock-line); }
+    .mock .bar .title { font-weight: 600; flex: 1; }
+    .mock .body { padding: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .m-btn { border: 1px solid var(--mock-line); border-radius: 6px; padding: 6px 10px; }
+    .hl { outline: 3px solid #f04452; outline-offset: 3px; border-radius: 8px; position: relative; }
+    .toggle { display: inline-flex; align-items: center; gap: 8px; }
+    .toggle i { width: 32px; height: 18px; border-radius: 99px; background: var(--blue); position: relative; display: inline-block; }
+    .toggle i::after { content: ""; position: absolute; right: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; }
+    .tb { display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 10px 14px; }
+    .tb svg { width: 20px; height: 20px; }
+    .menu { margin: 0 14px 14px auto; width: 230px; border: 1px solid var(--mock-line); border-radius: 10px; padding: 6px; }
+    .menu div { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; }
+    .menu img { width: 18px; height: 18px; }
+    .menu .pin { margin-left: auto; }
+    .zipdemo { display: flex; align-items: center; gap: 14px; padding: 18px; }
+    .zipdemo .file { text-align: center; font-size: 12px; }
+    .zipdemo .file .ic { width: 52px; height: 52px; border-radius: 10px; display: grid; place-items: center; margin: 0 auto 6px; font-size: 26px; background: var(--card); }
+    .zipdemo .arrow { font-size: 20px; color: var(--hint); }
+
+    /* 사용법 카드 */
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: var(--soft); border-radius: 16px; padding: 18px; }
+    .card b { display: block; margin-bottom: 4px; }
+    .card span { color: var(--sub); font-size: 14px; }
+    .shot { margin-top: 20px; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+    .shot img { display: block; width: 100%; height: auto; }
+
+    /* FAQ */
+    details { background: var(--soft); border-radius: 14px; padding: 14px 18px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 700; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "＋"; float: right; color: var(--hint); }
+    details[open] summary::after { content: "－"; }
+    details p, details ol { color: var(--sub); margin: 10px 0 0; font-size: 15px; }
+
+    footer { padding: 32px 0 56px; border-top: 1px solid var(--line); color: var(--hint); font-size: 13px; text-align: center; }
+    footer a { color: var(--hint); text-decoration: underline; }
+
+    .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); opacity: 0; background: rgba(25,31,40,.92); color: #fff; padding: 10px 18px; border-radius: 12px; font-size: 14px; transition: .2s; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 560px) {
+      .step { grid-template-columns: 1fr; gap: 8px; }
+      .btn.primary { min-width: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <div class="logo-card"><img src="logo.png" alt="iSubby" /></div>
+    <h1>아캠 강의 영상 위에<br />자막을 바로</h1>
+    <p>SRT 파일을 끌어다 놓으면 끝. 배속·건너뛰기에도 싱크가 맞아요.</p>
+    <div class="cta">
+      <a class="btn primary" id="download" href="iSubby.zip" download>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
+        iSubby 다운로드
+      </a>
+      <span class="meta" id="ver">v1.5.1 · 무료 · PC 크롬 전용</span>
+      <span class="btn ghost" id="storeBtn">크롬 웹 스토어 등록 준비 중</span>
+    </div>
+    <div class="chips">
+      <span class="chip">Chrome</span><span class="chip">네이버 웨일</span><span class="chip">Edge</span><span class="chip">Brave · Arc</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="install">
+      <h2>설치 방법</h2>
+      <p class="lead">처음 한 번만 하면 돼요. 3분이면 끝나요.</p>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div>
+          <h3>받은 파일 압축 풀기</h3>
+          <p>위 버튼으로 받은 <code>iSubby.zip</code>의 압축을 풀어요.</p>
+          <div class="mock"><div class="zipdemo">
+            <div class="file"><div class="ic">🗜️</div>iSubby.zip</div>
+            <div class="arrow">→</div>
+            <div class="file"><div class="ic">📁</div>iSubby</div>
+          </div></div>
+          <div class="tip"><b>맥</b>: 다운로드 폴더에서 zip을 더블클릭하면 <code>iSubby</code> 폴더가 생겨요.<br /><b>윈도우</b>: zip을 오른쪽 클릭 → <b>압축 풀기</b> → <b>압축 풀기</b> 버튼.</div>
+          <div class="warn">⚠️ 압축 푼 폴더를 <b>문서</b>처럼 지우지 않을 곳으로 옮겨두세요. 이 폴더를 지우면 확장도 함께 사라져요.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">2</div>
+        <div>
+          <h3>확장 프로그램 관리 화면 열기</h3>
+          <p>쓰는 브라우저를 고르고, 아래 주소를 복사해서 주소창에 붙여넣으세요.</p>
+          <div class="browsers" role="group" aria-label="브라우저 선택">
+            <button data-scheme="chrome" aria-pressed="true">크롬</button>
+            <button data-scheme="whale" aria-pressed="false">웨일</button>
+            <button data-scheme="edge" aria-pressed="false">엣지</button>
+          </div>
+          <div class="copy"><code id="extUrl">chrome://extensions</code><button id="copyBtn">복사</button></div>
+          <div class="tip">보안 때문에 이 주소는 링크로 바로 열 수 없어요. 꼭 주소창에 붙여넣어 주세요.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">3</div>
+        <div>
+          <h3>오른쪽 위 "개발자 모드" 켜기</h3>
+          <p>스위치를 눌러 파랗게 켜요.</p>
+          <div class="mock">
+            <div class="bar"><span class="title">확장 프로그램</span><span class="toggle hl">개발자 모드 <i></i></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">4</div>
+        <div>
+          <h3>"압축해제된 확장 프로그램 로드" → iSubby 폴더 선택</h3>
+          <p>왼쪽 위에 나타난 버튼을 누르고, 1단계에서 압축 푼 <code>iSubby</code> 폴더를 골라 <b>선택</b>을 눌러요.</p>
+          <div class="mock">
+            <div class="body">
+              <span class="m-btn hl">압축해제된 확장 프로그램 로드</span>
+              <span class="m-btn">확장 프로그램 압축</span>
+              <span class="m-btn">업데이트</span>
+            </div>
+          </div>
+          <div class="tip">목록에 <b>iSubby</b> 카드가 생기면 설치 완료예요.<br />웨일에서는 버튼 이름이 "압축 해제된 확장앱을 로드합니다"로 보일 수 있어요.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">5</div>
+        <div>
+          <h3>툴바에 고정하기</h3>
+          <p>주소창 오른쪽 퍼즐 조각 아이콘을 누르고, iSubby 옆 핀을 눌러 고정해요.</p>
+          <div class="mock">
+            <div class="tb">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="hl" aria-label="퍼즐 아이콘"><path d="M10 4a2 2 0 1 1 4 0v2h4v4h-2a2 2 0 1 0 0 4h2v4h-4v-2a2 2 0 1 0-4 0v2H6v-4h2a2 2 0 1 0 0-4H6V6h4z"/></svg>
+            </div>
+            <div class="menu">
+              <div><img src="icon.png" alt="" /> iSubby <span class="pin hl">📌</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="use">
+      <h2>사용법</h2>
+      <p class="lead">아캠에서 강의 영상을 열면 바로 쓸 수 있어요.</p>
+      <div class="grid">
+        <div class="card"><b>공유 자막은 자동으로</b><span>자막이 올라와 있는 강의는 영상을 열기만 하면 자막이 떠요.</span></div>
+        <div class="card"><b>내 SRT 띄우기</b><span>SRT 파일을 영상 위로 끌어다 놓거나, 툴바의 iSubby 버튼으로 불러와요.</span></div>
+        <div class="card"><b>싱크 맞추기</b><span>팝업 버튼이나 플레이어를 클릭한 뒤 <kbd>[</kbd> <kbd>]</kbd> 키로 0.5초씩 조절해요.</span></div>
+        <div class="card"><b>자막 켜기·끄기</b><span>팝업 오른쪽 위 스위치나 <kbd>Shift</kbd>+<kbd>S</kbd>로 바꿔요.</span></div>
+      </div>
+      <div class="shot"><img src="screenshot.png" alt="iSubby 팝업 화면" loading="lazy" /></div>
+    </section>
+
+    <section id="faq">
+      <h2>자주 묻는 질문</h2>
+      <details>
+        <summary>"매니페스트 파일이 없거나 읽을 수 없습니다" 오류가 떠요</summary>
+        <p>폴더를 잘못 골랐을 때 나와요. <code>manifest.json</code> 파일이 바로 보이는 폴더를 골라야 해요. 윈도우에서 압축을 풀지 않은 zip 안의 폴더를 고른 경우에도 이 오류가 나니, 1단계대로 먼저 압축을 풀어주세요.</p>
+      </details>
+      <details>
+        <summary>크롬을 켤 때 "개발자 모드 확장 프로그램 사용 중지" 알림이 떠요</summary>
+        <p>스토어 밖에서 설치한 확장에 크롬이 띄우는 일반 안내예요. <b>사용 중지</b>가 아니라 창을 닫거나 <b>취소</b>를 누르면 그대로 쓸 수 있어요. 크롬 웹 스토어 등록이 끝나면 이 알림 없이 설치할 수 있게 바꿀 예정이에요.</p>
+      </details>
+      <details>
+        <summary>강의 영상을 열었는데 자막이 안 떠요</summary>
+        <ol>
+          <li>영상이 다 로드된 뒤 페이지를 새로고침해 보세요.</li>
+          <li>팝업에 "아직 자막이 없어요"가 나오면, 그 강의에는 아직 공유 자막이 없는 거예요. 내 SRT를 불러와서 쓸 수 있어요.</li>
+          <li>팝업 오른쪽 위 자막 스위치가 켜져 있는지 확인하세요.</li>
+        </ol>
+      </details>
+      <details>
+        <summary>새 버전은 어떻게 받아요?</summary>
+        <p>이 페이지에서 새 zip을 받아 압축을 풀고, 기존 <code>iSubby</code> 폴더 안의 파일을 새 파일로 바꿔 넣은 뒤 확장 프로그램 관리 화면에서 iSubby의 새로고침(↻) 버튼을 누르세요. 불러온 자막과 설정은 그대로 남아요.</p>
+      </details>
+      <details>
+        <summary>휴대폰이나 태블릿에서도 되나요?</summary>
+        <p>아니요. 모바일 브라우저는 확장 프로그램을 지원하지 않아서 PC에서만 쓸 수 있어요.</p>
+      </details>
+      <details>
+        <summary>내 정보가 어딘가로 전송되나요?</summary>
+        <p>아니요. 불러온 자막과 설정은 내 브라우저에만 저장돼요. 자세한 내용은 <a href="https://github.com/joony06/iSubby/blob/main/PRIVACY.md">개인정보처리방침</a>을 확인하세요.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    © 2026 AePhroDeChi · <a href="https://github.com/joony06/iSubby">GitHub</a> · <a href="https://github.com/joony06/iSubby/blob/main/PRIVACY.md">개인정보처리방침</a><br />
+    iSubby는 성균관대학교의 공식 서비스가 아닌, 학생이 만든 개인 프로젝트입니다.
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // 크롬 웹 스토어 등록 후 주소를 넣으면 메인 버튼이 "Chrome에 추가"로 바뀌어요.
+    const STORE_URL = "";
+    const VERSION = "1.5.1";
+
+    const $ = (id) => document.getElementById(id);
+    $("ver").textContent = `v${VERSION} · 무료 · PC 전용`;
+    if (STORE_URL) {
+      const d = $("download");
+      d.href = STORE_URL; d.removeAttribute("download"); d.lastChild.textContent = " Chrome에 추가";
+      const s = $("storeBtn");
+      s.textContent = "스토어를 못 쓰면 zip으로 설치하기"; s.style.cursor = "pointer";
+      s.onclick = () => (location.href = "iSubby.zip");
+    }
+
+    let t;
+    function toast(msg) {
+      const el = $("toast"); el.textContent = msg; el.classList.add("show");
+      clearTimeout(t); t = setTimeout(() => el.classList.remove("show"), 1600);
+    }
+
+    document.querySelectorAll(".browsers button").forEach((b) =>
+      b.addEventListener("click", () => {
+        document.querySelectorAll(".browsers button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+        $("extUrl").textContent = `${b.dataset.scheme}://extensions`;
+      })
+    );
+    // 웨일·엣지 사용자는 처음부터 맞는 주소를 보여줌
+    const ua = navigator.userAgent;
+    const pre = /Whale/.test(ua) ? "whale" : /Edg\//.test(ua) ? "edge" : null;
+    if (pre) document.querySelector(`[data-scheme="${pre}"]`).click();
+
+    $("copyBtn").addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText($("extUrl").textContent); toast("주소를 복사했어요. 주소창에 붙여넣으세요"); }
+      catch { toast("복사하지 못했어요. 직접 입력해 주세요"); }
+    });
+  </script>
+</body>
+</html>

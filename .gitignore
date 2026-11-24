@@ -3,3 +3,4 @@
 *.vtt
 *.zip
 .DS_Store
+!docs/iSubby.zip
