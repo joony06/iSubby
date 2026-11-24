@@ -33,13 +33,17 @@
 
 .srt-ov-toast {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  padding: 6px 10px;
-  background: rgba(0, 0, 0, 0.75);
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 9px 16px;
+  background: rgba(25, 31, 40, 0.88);
   color: #fff;
-  font: 13px/1.2 system-ui, sans-serif;
-  border-radius: 6px;
+  font: 600 14px/1.3 -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  border-radius: 99px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
   opacity: 0;
   transition: opacity 0.25s;
 }

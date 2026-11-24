@@ -6,43 +6,84 @@ function send(msg) {
   return chrome.tabs.sendMessage(tabId, msg).catch(() => null);
 }
 
+// ---------- 토스트 ----------
+let toastTimer = null;
+function toast(text) {
+  const t = $("toast");
+  t.textContent = text;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+// ---------- 상태 표시 ----------
 function showStatus(st) {
-  const el = $("status");
   if (!st || !st.ok) {
-    el.className = "status err";
-    el.innerHTML =
-      "이 탭에서 강의 플레이어를 찾지 못했어요.<br><span class='muted'>Canvas 강의 페이지에서 영상이 로드된 뒤 다시 열어주세요.</span>";
-    $("controls").hidden = true;
+    $("noPlayer").hidden = false;
+    $("player").hidden = true;
     $("clearRow").hidden = true;
     return;
   }
-  el.className = "status";
-  const badge =
-    st.source === "shared" ? '<span class="badge">공유</span>' : st.source === "local" ? '<span class="badge local">내 파일</span>' : "";
-  el.innerHTML = st.cueCount
-    ? `<b>${escapeHtml(st.fileName || "자막")}</b>${badge}<br><span class="muted">${st.cueCount}개 자막 · 콘텐츠 ${st.contentId}</span>`
-    : `플레이어 연결됨<br><span class="muted">콘텐츠 ${st.contentId} · 아직 자막 없음</span>`;
-  $("controls").hidden = false;
+  $("noPlayer").hidden = true;
+  $("player").hidden = false;
+
+  const has = st.cueCount > 0;
+  const chip = $("chip");
+  chip.hidden = !has;
+  if (st.source === "shared") {
+    chip.textContent = "공유 자막";
+    chip.className = "chip";
+  } else if (st.source === "local") {
+    chip.textContent = "내 파일";
+    chip.className = "chip mine";
+  }
+
+  if (has) {
+    $("heading").textContent = st.source === "shared" ? "자막이 준비됐어요" : stripExt(st.fileName || "내 자막");
+    $("subline").textContent = `자막 ${st.cueCount.toLocaleString()}개를 보여주고 있어요`;
+  } else {
+    $("heading").textContent = "아직 자막이 없어요";
+    $("subline").textContent = "SRT 파일을 불러오면 바로 보여드릴게요";
+  }
+
+  // 공유 자막을 보는 중에도 내 파일로 바꿀 수 있게 불러오기 버튼은 항상 노출
+  $("pick").textContent = has ? "다른 자막 불러오기" : "SRT 파일 불러오기";
+  $("syncCard").hidden = !has;
   $("clearRow").hidden = !st.localCount;
-  $("offset").textContent = (st.offset >= 0 ? "+" : "") + st.offset.toFixed(1) + "s";
+  $("offset").textContent = (st.offset > 0 ? "+" : st.offset < 0 ? "−" : "") + Math.abs(st.offset).toFixed(1);
 }
 
-function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-}
+const stripExt = (n) => n.replace(/\.(srt|vtt)$/i, "");
 
+// ---------- 파일 불러오기 ----------
 async function readFile(file) {
+  if (!/\.(srt|vtt)$/i.test(file.name)) return toast("SRT 또는 VTT 파일만 불러올 수 있어요");
   const buf = await file.arrayBuffer();
   // UTF-8로 먼저 읽고, 깨지면 EUC-KR(CP949)로 다시 시도
   let text = new TextDecoder("utf-8").decode(buf);
-  if (text.includes("\uFFFD")) {
+  if (text.includes("�")) {
     try { text = new TextDecoder("euc-kr").decode(buf); } catch {}
   }
-  if (!SRT.parseSRT(text).length) {
-    alert("자막을 읽지 못했어요. SRT 형식인지 확인해주세요.");
-    return;
-  }
-  showStatus(await send({ type: "load", text, fileName: file.name }));
+  if (!SRT.parseSRT(text).length) return toast("자막을 읽지 못했어요. 파일 형식을 확인해주세요");
+  const st = await send({ type: "load", text, fileName: file.name });
+  if (!st) return toast("강의 영상이 열린 탭에서 다시 시도해주세요");
+  showStatus(st);
+  toast(`자막 ${st.cueCount.toLocaleString()}개를 불러왔어요`);
+}
+
+// ---------- 보기 설정 ----------
+function paintRange(el) {
+  const p = ((el.value - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty("--p", p + "%");
+}
+
+function paintPreview(s) {
+  const t = $("previewText");
+  // 실제 영상보다 작은 미리보기 창에 맞춰 축소해서 보여줌
+  t.style.fontSize = Math.max(9, s.fontSize * 0.5) + "px";
+  t.style.bottom = s.bottom + "%";
+  t.style.background = `rgba(0,0,0,${s.bg})`;
+  t.style.opacity = s.visible ? "1" : "0.25";
 }
 
 async function init() {
@@ -50,33 +91,61 @@ async function init() {
   tabId = tab && tab.id;
   showStatus(tabId ? await send({ type: "status" }) : null);
 
-  // 파일 선택 / 드래그
-  $("file").addEventListener("change", (e) => e.target.files[0] && readFile(e.target.files[0]));
-  const drop = $("drop");
-  drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
-  drop.addEventListener("dragleave", () => drop.classList.remove("over"));
-  drop.addEventListener("drop", (e) => {
+  // 파일 선택
+  $("pick").addEventListener("click", () => $("file").click());
+  $("file").addEventListener("change", (e) => {
+    if (e.target.files[0]) readFile(e.target.files[0]);
+    e.target.value = "";
+  });
+
+  // 팝업 어디에 끌어놓아도 불러오기
+  let depth = 0;
+  document.addEventListener("dragenter", (e) => { e.preventDefault(); depth++; document.body.classList.add("dragging"); });
+  document.addEventListener("dragleave", () => { if (--depth <= 0) { depth = 0; document.body.classList.remove("dragging"); } });
+  document.addEventListener("dragover", (e) => e.preventDefault());
+  document.addEventListener("drop", (e) => {
     e.preventDefault();
-    drop.classList.remove("over");
+    depth = 0;
+    document.body.classList.remove("dragging");
     const f = e.dataTransfer.files[0];
     if (f) readFile(f);
   });
 
   // 싱크
   document.querySelectorAll("button[data-d]").forEach((b) =>
-    b.addEventListener("click", async () => showStatus(await send({ type: "offset", delta: Number(b.dataset.d) })))
+    b.addEventListener("click", async () => {
+      const st = await send({ type: "offset", delta: Number(b.dataset.d) });
+      if (st) showStatus(st);
+    })
   );
-  $("reset").addEventListener("click", async () => showStatus(await send({ type: "resetOffset" })));
-  $("clear").addEventListener("click", async () => {
-    if (confirm("이 강의에 불러온 내 자막을 지울까요? (공유 자막이 있으면 그걸로 돌아가요)")) showStatus(await send({ type: "clear" }));
+  $("reset").addEventListener("click", async () => {
+    const st = await send({ type: "resetOffset" });
+    if (st) { showStatus(st); toast("싱크를 처음대로 돌렸어요"); }
   });
 
-  // 관리자 모드: 제목을 5번 연속 클릭하면 켜지고 꺼짐. 내보내기 버튼은 관리자에게만 보임
+  // 내 자막 삭제: 한 번 누르면 확인 상태, 3초 안에 한 번 더 누르면 삭제
+  let armTimer = null;
+  $("clear").addEventListener("click", async () => {
+    const btn = $("clear");
+    if (!btn.classList.contains("armed")) {
+      btn.classList.add("armed");
+      btn.textContent = "한 번 더 누르면 삭제";
+      armTimer = setTimeout(() => { btn.classList.remove("armed"); btn.textContent = "내 자막 삭제"; }, 3000);
+      return;
+    }
+    clearTimeout(armTimer);
+    btn.classList.remove("armed");
+    btn.textContent = "내 자막 삭제";
+    const st = await send({ type: "clear" });
+    showStatus(st);
+    toast(st && st.cueCount ? "내 자막을 지우고 공유 자막으로 돌아왔어요" : "내 자막을 지웠어요");
+  });
+
+  // 관리자 모드: 로고를 5번 연속 클릭하면 켜지고 꺼짐. 내보내기 버튼은 관리자에게만 보임
   const { admin: isAdmin } = await chrome.storage.local.get("admin");
   const applyAdmin = (on) => {
     $("export").hidden = !on;
     $("adminBadge").hidden = !on;
-    if (!on) $("exportHint").textContent = "";
   };
   applyAdmin(!!isAdmin);
   let clicks = 0, clickTimer = null;
@@ -89,12 +158,13 @@ async function init() {
     const { admin } = await chrome.storage.local.get("admin");
     await chrome.storage.local.set({ admin: !admin });
     applyAdmin(!admin);
+    toast(!admin ? "관리자 모드를 켰어요" : "관리자 모드를 껐어요");
   });
 
   // 공유용 암호화 파일 내보내기 (관리자 전용)
   $("export").addEventListener("click", async () => {
     const st = await send({ type: "export" });
-    if (!st || !st.cues || !st.cues.length) return;
+    if (!st || !st.cues || !st.cues.length) return toast("내보낼 내 자막이 없어요");
     const name = await ICS.fileNameFor(st.contentId);
     const blob = new Blob([await ICS.encryptCues(st.contentId, st.cues)], { type: "application/json" });
     const a = document.createElement("a");
@@ -102,7 +172,7 @@ async function init() {
     a.download = name;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-    $("exportHint").textContent = `${name} 을(를) 저장소 subs/ 폴더에 올리면 공유돼요.`;
+    toast("저장소 subs 폴더에 올리면 공유돼요");
   });
 
   // 표시 설정 (모든 강의 공통)
@@ -110,18 +180,33 @@ async function init() {
   const s = { ...DEFAULTS, ...(saved || {}) };
   const fmt = { fontSize: (v) => v + "px", bottom: (v) => v + "%", bg: (v) => Math.round(v * 100) + "%" };
   for (const k of ["fontSize", "bottom", "bg"]) {
-    $(k).value = s[k];
+    const el = $(k);
+    el.value = s[k];
     $(k + "V").textContent = fmt[k](s[k]);
-    $(k).addEventListener("input", () => {
-      s[k] = Number($(k).value);
+    paintRange(el);
+    el.addEventListener("input", () => {
+      s[k] = Number(el.value);
       $(k + "V").textContent = fmt[k](s[k]);
+      paintRange(el);
+      paintPreview(s);
       chrome.storage.local.set({ settings: s });
     });
   }
   $("visible").checked = s.visible;
   $("visible").addEventListener("change", () => {
     s.visible = $("visible").checked;
+    paintPreview(s);
     chrome.storage.local.set({ settings: s });
+  });
+  paintPreview(s);
+
+  // 플레이어에서 Shift+S로 바꾼 경우에도 스위치가 맞춰지도록
+  chrome.storage.onChanged.addListener((c, area) => {
+    if (area === "local" && c.settings && c.settings.newValue) {
+      s.visible = c.settings.newValue.visible;
+      $("visible").checked = s.visible;
+      paintPreview(s);
+    }
   });
 }
 
