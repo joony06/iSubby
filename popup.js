@@ -90,7 +90,14 @@ async function checkShared() {
   const r = await ICS.checkShared(st.contentId);
   if (seq !== checkSeq) return; // 그 사이 다시 확인한 경우
   if (r === "found") {
-    setShared("ok", st.sharedCount ? `올라가 있어요 · ${st.sharedCount.toLocaleString()}줄` : "올라가 있어요");
+    let count = st.sharedCount;
+    if (!count) {
+      // 저장소에는 있는데 페이지가 아직 못 받아온 경우 → 지금 받아오게 함
+      const fresh = await send({ type: "reloadShared" });
+      if (seq !== checkSeq) return;
+      if (fresh) { showStatus(fresh); count = fresh.sharedCount; }
+    }
+    setShared("ok", count ? `올라가 있어요 · ${count.toLocaleString()}줄` : "올라가 있어요");
     $("viewLink").href = await ICS.fileUrl(st.contentId);
     $("viewLink").hidden = false;
     $("uploadLink").hidden = true;

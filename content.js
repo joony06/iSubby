@@ -233,8 +233,13 @@
           fileName = "";
           offset = 0;
           await chrome.storage.local.remove(storeKey());
-          pickActive();
           if (box) box.textContent = "";
+          // 페이지를 연 뒤에 공유 자막이 올라왔을 수 있으니 비어 있으면 다시 받아옴
+          if (sharedCues.length) pickActive();
+          else await loadShared();
+          break;
+        case "reloadShared":
+          await loadShared();
           break;
         case "export":
           extra = { cues: localCues };
