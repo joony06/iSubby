@@ -6,6 +6,14 @@
   성균관대학교 iCampus(아캠) 강의 영상 위에 자막을 띄워주는 크롬 확장프로그램
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white" alt="Chrome Extension" />
+  <img src="https://img.shields.io/badge/Manifest-V3-34A853" alt="Manifest V3" />
+  <img src="https://img.shields.io/badge/version-1.5.0-3182F6" alt="version 1.5.0" />
+  <img src="https://img.shields.io/github/license/joony06/iSubby?color=191F28" alt="License" />
+  <img src="https://img.shields.io/badge/for-SKKU_iCampus-0F6E46" alt="for SKKU iCampus" />
+</p>
+
 ---
 
 ## 소개
