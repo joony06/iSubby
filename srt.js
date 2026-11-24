@@ -1,3 +1,4 @@
+// iSubby — Copyright (c) 2026 AePhroDeChi. MIT License.
 // SRT / WebVTT 파서. content.js와 popup.js 양쪽에서 사용합니다.
 (function (global) {
   function toSeconds(ts) {

@@ -1,3 +1,4 @@
+// iSubby — Copyright (c) 2026 AePhroDeChi. MIT License.
 // iSubby — lcms.skku.edu 플레이어 iframe 안에서 실행됩니다.
 (() => {
   const DEFAULTS = { fontSize: 22, bottom: 12, bg: 0.6, visible: true };
@@ -211,6 +212,7 @@
       source,
       cueCount: cues.length,
       localCount: localCues.length,
+      sharedCount: sharedCues.length,
       offset,
     });
 

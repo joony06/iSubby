@@ -1,6 +1,9 @@
+// iSubby — Copyright (c) 2026 AePhroDeChi. MIT License.
 const DEFAULTS = { fontSize: 22, bottom: 12, bg: 0.6, visible: true };
 const $ = (id) => document.getElementById(id);
 let tabId = null;
+let lastStatus = null;
+let adminOn = false;
 
 function send(msg) {
   return chrome.tabs.sendMessage(tabId, msg).catch(() => null);
@@ -18,6 +21,9 @@ function toast(text) {
 
 // ---------- 상태 표시 ----------
 function showStatus(st) {
+  const prevId = lastStatus && lastStatus.contentId;
+  lastStatus = st && st.ok ? st : null;
+  renderAdmin(prevId !== (lastStatus && lastStatus.contentId));
   if (!st || !st.ok) {
     $("noPlayer").hidden = false;
     $("player").hidden = true;
@@ -51,6 +57,52 @@ function showStatus(st) {
   $("syncCard").hidden = !has;
   $("clearRow").hidden = !st.localCount;
   $("offset").textContent = (st.offset > 0 ? "+" : st.offset < 0 ? "−" : "") + Math.abs(st.offset).toFixed(1);
+}
+
+
+// ---------- 관리자 카드 ----------
+let checkSeq = 0;
+async function renderAdmin(recheck) {
+  const card = $("adminCard");
+  $("adminBadge").hidden = !adminOn;
+  card.hidden = !(adminOn && lastStatus);
+  if (card.hidden) return;
+  const st = lastStatus;
+  $("cid").textContent = st.contentId;
+  $("cid").title = st.contentId;
+  $("uploadLink").href = ICS.uploadUrl();
+
+  const exp = $("export");
+  exp.disabled = !st.localCount;
+  exp.style.opacity = st.localCount ? "1" : ".45";
+  $("adminNote").textContent = st.localCount
+    ? "내보낸 파일을 subs 폴더에 올리면 몇 분 안에 수강생에게 적용돼요."
+    : "내보내려면 먼저 이 강의에 내 SRT 파일을 불러와 주세요.";
+  if (recheck) checkShared();
+}
+
+async function checkShared() {
+  const st = lastStatus;
+  if (!st) return;
+  const seq = ++checkSeq;
+  setShared("", "확인 중…");
+  $("viewLink").hidden = true;
+  const r = await ICS.checkShared(st.contentId);
+  if (seq !== checkSeq) return; // 그 사이 다시 확인한 경우
+  if (r === "found") {
+    setShared("ok", st.sharedCount ? `올라가 있어요 · ${st.sharedCount.toLocaleString()}줄` : "올라가 있어요");
+    $("viewLink").href = await ICS.fileUrl(st.contentId);
+    $("viewLink").hidden = false;
+    $("uploadLink").hidden = true;
+  } else {
+    setShared(r === "none" ? "no" : "err", r === "none" ? "아직 없어요" : "확인하지 못했어요");
+    $("uploadLink").hidden = false;
+  }
+}
+
+function setShared(cls, text) {
+  $("sharedDot").className = "dot" + (cls ? " " + cls : "");
+  $("sharedText").textContent = text;
 }
 
 const stripExt = (n) => n.replace(/\.(srt|vtt)$/i, "");
@@ -141,13 +193,9 @@ async function init() {
     toast(st && st.cueCount ? "내 자막을 지우고 공유 자막으로 돌아왔어요" : "내 자막을 지웠어요");
   });
 
-  // 관리자 모드: 로고를 5번 연속 클릭하면 켜지고 꺼짐. 내보내기 버튼은 관리자에게만 보임
-  const { admin: isAdmin } = await chrome.storage.local.get("admin");
-  const applyAdmin = (on) => {
-    $("export").hidden = !on;
-    $("adminBadge").hidden = !on;
-  };
-  applyAdmin(!!isAdmin);
+  // 관리자 모드: 로고를 5번 연속 클릭하면 켜지고 꺼짐
+  adminOn = !!(await chrome.storage.local.get("admin")).admin;
+  renderAdmin(true);
   let clicks = 0, clickTimer = null;
   $("title").addEventListener("click", async () => {
     clicks++;
@@ -155,10 +203,21 @@ async function init() {
     clickTimer = setTimeout(() => (clicks = 0), 1500);
     if (clicks < 5) return;
     clicks = 0;
-    const { admin } = await chrome.storage.local.get("admin");
-    await chrome.storage.local.set({ admin: !admin });
-    applyAdmin(!admin);
-    toast(!admin ? "관리자 모드를 켰어요" : "관리자 모드를 껐어요");
+    adminOn = !adminOn;
+    await chrome.storage.local.set({ admin: adminOn });
+    renderAdmin(true);
+    toast(adminOn ? "관리자 모드를 켰어요" : "관리자 모드를 껐어요");
+  });
+
+  $("recheck").addEventListener("click", () => checkShared());
+  $("copyCid").addEventListener("click", async () => {
+    if (!lastStatus) return;
+    try {
+      await navigator.clipboard.writeText(lastStatus.contentId);
+      toast("콘텐츠 ID를 복사했어요");
+    } catch {
+      toast("복사하지 못했어요");
+    }
   });
 
   // 공유용 암호화 파일 내보내기 (관리자 전용)
@@ -172,7 +231,7 @@ async function init() {
     a.download = name;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-    toast("저장소 subs 폴더에 올리면 공유돼요");
+    toast("받은 파일을 subs 폴더에 올려주세요");
   });
 
   // 표시 설정 (모든 강의 공통)

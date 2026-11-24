@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- iSubby — Copyright (c) 2026 AePhroDeChi. MIT License. -->
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
@@ -141,6 +142,30 @@
     .footer .danger.armed { background: var(--red-weak); color: var(--red); }
     .footer .accent { background: var(--blue-weak); color: var(--blue); }
 
+
+    /* 관리자 카드 */
+    .admin-card { border: 1.5px dashed var(--line); background: transparent; }
+    .kv { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 0; font-size: 14px; }
+    .kv + .kv { border-top: 1px solid var(--line); }
+    .kv .k { color: var(--sub); flex: none; }
+    .kv .v { display: flex; align-items: center; gap: 6px; min-width: 0; font-weight: 600; }
+    .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .copy { flex: none; font-size: 12px; font-weight: 600; color: var(--blue); background: var(--blue-weak); padding: 3px 8px; border-radius: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hint); flex: none; }
+    .dot.ok { background: #1bc47d; }
+    .dot.no { background: #ff9f29; }
+    .dot.err { background: var(--red); }
+    .admin-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .admin-actions button, .admin-actions a {
+      flex: 1; height: 40px; border-radius: 10px; display: grid; place-items: center; text-decoration: none;
+      font-size: 13px; font-weight: 600; background: var(--btn); color: var(--sub); transition: background .15s, color .15s;
+    }
+    .admin-actions button:hover, .admin-actions a:hover { background: var(--btn-press); color: var(--text); }
+    .admin-actions .accent { background: var(--blue-weak); color: var(--blue); }
+    .admin-note { margin: 10px 0 0; font-size: 12px; color: var(--hint); word-break: keep-all; }
+
+    .copyright { text-align: center; font-size: 11px; color: var(--hint); margin: 16px 0 0; }
+
     /* 토스트 */
     .toast {
       position: fixed; left: 50%; bottom: 16px; transform: translate(-50%, 12px); opacity: 0;
@@ -206,6 +231,26 @@
       </div>
     </section>
 
+
+    <!-- 관리자 전용 -->
+    <div class="card admin-card" id="adminCard" hidden>
+      <div class="card-title"><span>관리자</span><button class="text-btn" id="recheck">다시 확인</button></div>
+      <div class="kv">
+        <span class="k">콘텐츠 ID</span>
+        <span class="v"><span class="mono" id="cid">-</span><button class="copy" id="copyCid">복사</button></span>
+      </div>
+      <div class="kv">
+        <span class="k">공유 자막</span>
+        <span class="v"><span class="dot" id="sharedDot"></span><span id="sharedText">확인 중…</span></span>
+      </div>
+      <div class="admin-actions">
+        <button class="accent" id="export">내보내기</button>
+        <a id="uploadLink" target="_blank" rel="noopener">subs에 올리기</a>
+        <a id="viewLink" target="_blank" rel="noopener" hidden>GitHub에서 보기</a>
+      </div>
+      <p class="admin-note" id="adminNote"></p>
+    </div>
+
     <!-- 보기 설정 -->
     <div class="card">
       <div class="card-title"><span>보기 설정</span></div>
@@ -226,8 +271,9 @@
 
     <div class="footer" id="clearRow" hidden>
       <button class="danger" id="clear">내 자막 삭제</button>
-      <button class="accent" id="export" hidden>공유용 내보내기</button>
     </div>
+
+    <p class="copyright">© 2026 AePhroDeChi</p>
   </main>
 
   <div class="toast" id="toast"></div>

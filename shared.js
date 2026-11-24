@@ -1,8 +1,10 @@
+// iSubby — Copyright (c) 2026 AePhroDeChi. MIT License.
 // iSubby 공유 자막: 콘텐츠 ID 기반 파일명 해시 + AES-GCM 암호화
 // 주의: 아래 "icamsub:" 접두어는 이미 올린 자막 파일과 호환되도록 바꾸지 마세요.
 (function (global) {
   // ▼ 자막 저장소 주소
-  const SUBS_BASE = "https://raw.githubusercontent.com/joony06/iSubby/main/subs/";
+  const REPO = "joony06/iSubby";
+  const SUBS_BASE = `https://raw.githubusercontent.com/${REPO}/main/subs/`;
 
   const enc = new TextEncoder();
   const dec = new TextDecoder();
@@ -60,5 +62,20 @@
     }
   }
 
-  global.ICS = { fileNameFor, encryptCues, decryptCues, fetchShared };
+  // 관리자용: 공유 자막이 저장소에 올라가 있는지 확인 → "found" | "none" | "error"
+  async function checkShared(contentId) {
+    try {
+      const res = await fetch(SUBS_BASE + (await fileNameFor(contentId)), { method: "HEAD", cache: "no-cache" });
+      if (res.ok) return "found";
+      if (res.status === 404) return "none";
+      return "error";
+    } catch {
+      return "error";
+    }
+  }
+
+  const uploadUrl = () => `https://github.com/${REPO}/upload/main/subs`;
+  const fileUrl = async (contentId) => `https://github.com/${REPO}/blob/main/subs/${await fileNameFor(contentId)}`;
+
+  global.ICS = { fileNameFor, encryptCues, decryptCues, fetchShared, checkShared, uploadUrl, fileUrl };
 })(typeof window !== "undefined" ? window : globalThis);
