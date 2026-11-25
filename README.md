@@ -9,7 +9,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white" alt="Chrome Extension" />
   <img src="https://img.shields.io/badge/Manifest-V3-34A853" alt="Manifest V3" />
-  <img src="https://img.shields.io/badge/version-1.7.1-3182F6" alt="version 1.7.1" />
+  <img src="https://img.shields.io/badge/version-1.7.2-3182F6" alt="version 1.7.2" />
   <img src="https://img.shields.io/github/license/joony06/iSubby?color=191F28" alt="License" />
   <img src="https://img.shields.io/badge/for-SKKU_iCampus-0F6E46" alt="for SKKU iCampus" />
 </p>
@@ -202,6 +202,7 @@ iSubby/
 
 ## 버전 기록
 
+- **1.7.2**: 메일·메신저로 보내 칸이 공백으로 바뀐 강의 목록도 분반 연결에서 읽음
 - **1.7.1**: 일반 사용자도 공유 자막 과목의 강의 목록에서 "자막 ✓" 표시를 봄 (목록 복사 막대도 이 과목에서만)
 - **1.7.0**: 분반 연결(목록 복사·비교, 자동 연결), SRT 한꺼번에 올리기
 - **1.6.1**: 강의콘텐츠 페이지의 관리자 카드가 상단 고정 바에 가려지던 문제 수정

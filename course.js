@@ -504,14 +504,22 @@
     ta.focus();
   }
 
+  // 메일·메신저를 거치면 탭이 공백으로 바뀌기도 해서, 공백으로 나뉜 줄도 읽음
   function parseList(text) {
     const items = [];
     let course = null;
-    for (const line of String(text).split(/\r?\n/)) {
+    const ROW = /^(\S+)\s+(.+?)\s+([0-9a-z]{10,20})\s+(\d+(?:\.\d+)?)(?:\s+(.*))?$/i;
+    for (const raw of String(text).replace(/\u00a0/g, " ").split(/\r?\n/)) {
+      const line = raw.trim();
+      if (!line) continue;
+      if (line.replace(/\s+/g, " ").startsWith(LIST_HEADER)) { const m = /course=(\d+)/.exec(line); course = m && m[1]; continue; }
       const f = line.split("\t");
-      if (f[0] === LIST_HEADER) { const m = /course=(\d+)/.exec(line); course = m && m[1]; continue; }
-      if (f.length < 4 || !/^[0-9a-z]{8,}$/i.test(f[2].trim())) continue;
-      items.push({ week: f[0].trim(), title: f[1].trim(), contentId: f[2].trim(), duration: parseFloat(f[3]) || 0, videoTitle: (f[4] || "").trim() });
+      if (f.length >= 4 && /^[0-9a-z]{8,}$/i.test(f[2].trim())) {
+        items.push({ week: f[0].trim(), title: f[1].trim(), contentId: f[2].trim(), duration: parseFloat(f[3]) || 0, videoTitle: (f[4] || "").trim() });
+        continue;
+      }
+      const m = ROW.exec(line);
+      if (m) items.push({ week: m[1], title: m[2].trim(), contentId: m[3], duration: parseFloat(m[4]) || 0, videoTitle: (m[5] || "").trim() });
     }
     return { course, items };
   }
