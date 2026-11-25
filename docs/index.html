@@ -186,7 +186,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
         iSubby 다운로드
       </a>
-      <span class="meta" id="ver">v1.5.1 · 무료 · PC 크롬 전용</span>
+      <span class="meta" id="ver">v1.6.0 · 무료 · PC 크롬 전용</span>
       <span class="btn ghost" id="storeBtn">크롬 웹 스토어 등록 준비 중</span>
     </div>
     <div class="chips">
@@ -270,6 +270,8 @@
         <div class="card"><b>내 SRT 띄우기</b><span>SRT 파일을 영상 위로 끌어다 놓거나, 툴바의 iSubby 버튼으로 불러와요.</span></div>
         <div class="card"><b>싱크 맞추기</b><span>팝업 버튼이나 플레이어를 클릭한 뒤 <kbd>[</kbd> <kbd>]</kbd> 키로 0.5초씩 조절해요.</span></div>
         <div class="card"><b>자막 켜기·끄기</b><span>팝업 오른쪽 위 스위치나 <kbd>Shift</kbd>+<kbd>S</kbd>로 바꿔요.</span></div>
+        <div class="card"><b>자막 목록 보기</b><span>플레이어 오른쪽 위 목록 버튼이나 <kbd>T</kbd> 키로 전체 자막을 대본처럼 펼쳐요. 줄을 누르면 그 시점으로 이동해요.</span></div>
+        <div class="card"><b>키워드로 찾기</b><span>자막 목록 위 검색창에 단어를 넣으면 그 단어가 나온 부분만 모아 보여줘요. 시험 공부할 때 편해요.</span></div>
       </div>
       <div class="shot"><img src="img/popup.png" alt="iSubby 팝업 화면" loading="lazy" /></div>
     </section>
@@ -289,6 +291,7 @@
         <ol>
           <li>영상이 다 로드된 뒤 페이지를 새로고침해 보세요.</li>
           <li>팝업에 "아직 자막이 없어요"가 나오면, 그 강의에는 아직 공유 자막이 없는 거예요. 내 SRT를 불러와서 쓸 수 있어요.</li>
+          <li>팝업에 "강의를 알아보지 못했어요"가 나오면 학교 플레이어가 바뀐 경우일 수 있어요. 팝업의 <b>문제 알리기</b>로 알려주세요.</li>
           <li>팝업 오른쪽 위 자막 스위치가 켜져 있는지 확인하세요.</li>
         </ol>
       </details>
@@ -331,7 +334,7 @@
   <script>
     // 크롬 웹 스토어 등록 후 주소를 넣으면 메인 버튼이 "Chrome에 추가"로 바뀌어요.
     const STORE_URL = "";
-    const VERSION = "1.5.1";
+    const VERSION = "1.6.0";
 
     const $ = (id) => document.getElementById(id);
 

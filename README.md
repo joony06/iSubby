@@ -149,6 +149,7 @@ iSubby/
 ├── subs/           # 암호화된 공유 자막 (.json)
 ├── docs/           # 설치 안내 페이지 (GitHub Pages)와 다운로드용 zip
 ├── ROADMAP.md      # 추가할 기능·보완점
+├── RELEASE.md      # 업데이트할 때 함께 맞출 것 체크리스트
 ├── LICENSE         # MIT 라이선스
 └── .gitignore      # 평문 자막(.srt, .vtt) 커밋 방지
 ```
