@@ -316,6 +316,7 @@
     input.accept = ".srt";
     input.multiple = true;
     input.hidden = true;
+    input.style.setProperty("display", "none", "important"); // 아캠 페이지 스타일이 hidden을 덮어써서 기본 파일 버튼이 보이던 문제
     const pick = el("button", "isb-btn isb-primary", "SRT 파일 고르기");
     pick.type = "button";
     pick.addEventListener("click", () => input.click());
