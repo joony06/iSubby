@@ -40,3 +40,42 @@
 .isb-badge.found { background: #e6f8ef; color: #12a364; }
 .isb-badge.none { background: #fff3e0; color: #d97a00; }
 .isb-badge.error { background: #ffeeee; color: #e42939; }
+
+/* 분반 연결 */
+.isb-card.folded .isb-tools { display: none; }
+.isb-tools { margin-top: 12px; padding: 12px; border-radius: 10px; background: #fff; border: 1px solid #e5e8eb; display: grid; gap: 10px; }
+.isb-note { margin: 0; font-size: 13px; color: #4e5968; }
+.isb-note a { color: #3182f6; font-weight: 600; }
+.isb-warn { margin: 0; font-size: 13px; color: #e42939; font-weight: 600; }
+.isb-ta {
+  width: 100%; box-sizing: border-box; min-height: 90px; resize: vertical; border: 1px solid #d1d6db; border-radius: 8px;
+  padding: 8px 10px; font: 12px/1.5 ui-monospace, "SF Mono", Menlo, monospace; color: #191f28; background: #f9fafb;
+}
+.isb-primary { background: #3182f6 !important; color: #fff !important; justify-self: start; padding: 7px 14px; }
+.isb-primary:hover { background: #1b64da !important; }
+.isb-primary:disabled { opacity: .5; }
+.isb-result { display: grid; gap: 8px; }
+.isb-sumline { margin: 0; font-size: 13px; font-weight: 700; color: #191f28; }
+.isb-table { display: grid; gap: 2px; max-height: 260px; overflow-y: auto; }
+.isb-row { display: grid; grid-template-columns: 64px 1fr auto; gap: 8px; align-items: center; padding: 5px 8px; border-radius: 6px; font-size: 13px; }
+.isb-row:nth-child(odd) { background: #f9fafb; }
+.isb-k { font-size: 11px; font-weight: 700; text-align: center; padding: 1px 6px; border-radius: 99px; background: #f2f4f6; color: #8b95a1; }
+.isb-row.link .isb-k { background: #e8f3ff; color: #3182f6; }
+.isb-row.same .isb-k, .isb-row.has .isb-k { background: #e6f8ef; color: #12a364; }
+.isb-row.len .isb-k { background: #fff3e0; color: #d97a00; }
+.isb-t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.isb-i { font-size: 12px; color: #8b95a1; white-space: nowrap; }
+.isb-toast { margin-top: 8px; font-size: 13px; color: #12a364; font-weight: 600; }
+.isb-hr { border: 0; border-top: 1px solid #e5e8eb; margin: 4px 0; width: 100%; }
+.isb-tools.drag { outline: 2px dashed #3182f6; outline-offset: -4px; }
+.isb-brow { grid-template-columns: minmax(120px, 1fr) minmax(160px, 1.4fr) auto; }
+.isb-sel { font: inherit; font-size: 12px; padding: 4px 6px; border: 1px solid #d1d6db; border-radius: 6px; background: #fff; color: #191f28; min-width: 0; }
+.isb-row.none .isb-sel { border-color: #f59f00; }
+.isb-row.bad .isb-i { color: #e42939; }
+
+/* 모두에게 보이는 작은 막대 */
+.isb-bar {
+  box-sizing: border-box; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 12px 16px; padding: 8px 12px; border-radius: 10px;
+  background: #f2f8ff; border: 1px solid #d6e8ff; font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; color: #4e5968;
+}
+.isb-bar .isb-bar-t { flex: 1; min-width: 200px; }

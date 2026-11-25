@@ -22,6 +22,8 @@
           week: mod.title,
           weekPos: mod.position,
           contentId: cd.content_id,
+          duration: Number(cd.duration) || 0,
+          videoTitle: cd.title || it.title, // 영상 자체 제목 (분반 자동 연결에 사용)
         });
       }
     }

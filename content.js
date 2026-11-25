@@ -66,7 +66,14 @@
   async function loadShared() {
     if (!contentId) return;
     const id = contentId;
-    const got = await ICS.fetchShared(id);
+    let got = await ICS.fetchShared(id);
+    // [자동 연결] 이 영상 ID로 된 자막이 없으면, 제목·길이가 같은 다른 분반 영상의 자막을 찾아봄.
+    // 제목·길이는 강의콘텐츠 목록 페이지를 열 때 저장해 둔 값 (course.js)
+    if (!got) {
+      const { lectureMeta } = await chrome.storage.local.get("lectureMeta");
+      const m = lectureMeta && lectureMeta[id];
+      if (m) got = await ICS.fetchByFingerprint(m.t, m.d);
+    }
     if (id !== contentId) return; // 그 사이 다른 영상으로 바뀐 경우
     sharedCues = got || [];
     pickActive();
