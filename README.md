@@ -9,7 +9,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white" alt="Chrome Extension" />
   <img src="https://img.shields.io/badge/Manifest-V3-34A853" alt="Manifest V3" />
-  <img src="https://img.shields.io/badge/version-1.7.3-3182F6" alt="version 1.7.3" />
+  <img src="https://img.shields.io/badge/version-1.7.4-3182F6" alt="version 1.7.4" />
   <img src="https://img.shields.io/github/license/joony06/iSubby?color=191F28" alt="License" />
   <img src="https://img.shields.io/badge/for-SKKU_iCampus-0F6E46" alt="for SKKU iCampus" />
 </p>
@@ -101,7 +101,7 @@ Edge, 네이버 웨일, Brave, Arc 등 크로미움 기반 브라우저에서도
 ### SRT 한꺼번에 올리기
 강의마다 들어가서 불러오고 내보낼 필요 없이, 강의콘텐츠 페이지에서 한 번에 처리할 수 있습니다.
 
-1. 관리자 카드의 **SRT 한꺼번에 올리기**를 누르고 SRT 파일을 여러 개 고릅니다. (끌어다 놓아도 됩니다)
+1. 관리자 카드의 **SRT 한꺼번에 올리기**를 누르고 SRT 파일을 고릅니다. 파일 창에서 ⌘(Ctrl)·Shift로 여러 개를 한 번에 고르거나, 여러 번 나눠 골라도 목록에 쌓입니다. (끌어다 놓아도 됩니다)
 2. 파일 이름(예: `bizstat_w3_1.srt`)과 강의·영상 제목을 비교해 자동으로 짝지어집니다. 틀린 건 목록에서 바꿉니다. 이미 올린 강의는 "덮어씀"으로 표시됩니다.
 3. **N개 암호화해서 받기** → zip을 풀고 안의 `.json` 파일을 모두 `subs/` 업로드 페이지에 한 번에 끌어다 놓고 커밋합니다.
 
@@ -202,6 +202,7 @@ iSubby/
 
 ## 버전 기록
 
+- **1.7.4**: SRT 한꺼번에 올리기에서 여러 번 나눠 고른 파일이 목록에 쌓이도록, 목록 비우기 버튼 추가
 - **1.7.3**: SRT 한꺼번에 올리기에 기본 "파일 선택" 버튼이 겹쳐 보이던 문제 수정
 - **1.7.2**: 메일·메신저로 보내 칸이 공백으로 바뀐 강의 목록도 분반 연결에서 읽음
 - **1.7.1**: 일반 사용자도 공유 자막 과목의 강의 목록에서 "자막 ✓" 표시를 봄 (목록 복사 막대도 이 과목에서만)

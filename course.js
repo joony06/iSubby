@@ -310,7 +310,7 @@
     showTools();
     tools.dataset.mode = "bulk";
     tools.textContent = "";
-    tools.append(el("p", "isb-note", "SRT 파일을 여러 개 골라주세요. 파일 이름(예: bizstat_w3_1.srt)으로 강의를 찾아 짝지어요. 틀린 건 목록에서 바꾸면 돼요."));
+    tools.append(el("p", "isb-note", "SRT 파일을 골라주세요. 파일 창에서 ⌘(Ctrl)나 Shift를 누른 채 클릭하면 여러 개를 한 번에 고를 수 있고, 여러 번 나눠 골라도 목록에 계속 쌓여요. 파일 이름(예: bizstat_w3_1.srt)으로 강의를 찾아 짝지어요."));
     const input = el("input");
     input.type = "file";
     input.accept = ".srt";
@@ -321,28 +321,33 @@
     pick.type = "button";
     pick.addEventListener("click", () => input.click());
     const out = el("div", "isb-result");
-    input.addEventListener("change", () => readFiles([...input.files], out));
+    const rows = []; // 고른 파일이 계속 쌓임 (같은 이름은 새 파일로 바뀜)
+    const addFiles = async (files) => {
+      for (const f of files) {
+        let cues = [];
+        try { cues = SRT.parseSRT(await f.text()); } catch {}
+        const r = { name: f.name, cues, item: guessItem(f.name) };
+        const i = rows.findIndex((x) => x.name === f.name);
+        if (i >= 0) rows[i] = r; else rows.push(r);
+      }
+      rows.sort((a, b) => a.name.localeCompare(b.name, "ko", { numeric: true }));
+      renderRows(rows, out);
+    };
+    input.addEventListener("change", () => { addFiles([...input.files]); input.value = ""; });
     // 끌어다 놓기도 됨
     tools.addEventListener("dragover", (e) => { e.preventDefault(); tools.classList.add("drag"); });
     tools.addEventListener("dragleave", () => tools.classList.remove("drag"));
     tools.addEventListener("drop", (e) => {
       e.preventDefault();
       tools.classList.remove("drag");
-      if (tools.dataset.mode === "bulk") readFiles([...e.dataTransfer.files].filter((f) => /\.srt$/i.test(f.name)), out);
+      if (tools.dataset.mode === "bulk") addFiles([...e.dataTransfer.files].filter((f) => /\.srt$/i.test(f.name)));
     });
     tools.append(input, pick, out);
   }
 
-  async function readFiles(files, out) {
+  function renderRows(rows, out) {
     out.textContent = "";
-    if (!files.length) return;
-    const rows = [];
-    for (const f of files) {
-      let cues = [];
-      try { cues = SRT.parseSRT(await f.text()); } catch {}
-      rows.push({ name: f.name, cues, item: guessItem(f.name) });
-    }
-    rows.sort((a, b) => a.name.localeCompare(b.name, "ko", { numeric: true }));
+    if (!rows.length) return;
 
     const table = el("div", "isb-table");
     const sum = el("p", "isb-sumline");
@@ -392,7 +397,12 @@
       out.append(uploadNote());
       make.disabled = false;
     });
-    out.append(sum, table, make);
+    const clear = el("button", "isb-btn", "목록 비우기");
+    clear.type = "button";
+    clear.addEventListener("click", () => { rows.length = 0; renderRows(rows, out); });
+    const btns = el("div", "isb-btns");
+    btns.append(make, clear);
+    out.append(sum, table, btns);
     update();
   }
 

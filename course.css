@@ -79,3 +79,4 @@
   background: #f2f8ff; border: 1px solid #d6e8ff; font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; color: #4e5968;
 }
 .isb-bar .isb-bar-t { flex: 1; min-width: 200px; }
+.isb-btns { display: flex; gap: 8px; align-items: center; }

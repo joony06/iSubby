@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "iSubby",
   "short_name": "iSubby",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "description": "성균관대 iCampus(아캠) 강의 영상 위에 자막을 띄워줍니다.",
   "permissions": [
     "storage",
