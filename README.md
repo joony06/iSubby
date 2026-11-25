@@ -11,7 +11,8 @@
   <img src="https://img.shields.io/badge/Manifest-V3-34A853" alt="Manifest V3" />
   <img src="https://img.shields.io/badge/version-1.7.4-3182F6" alt="version 1.7.4" />
   <img src="https://img.shields.io/github/license/joony06/iSubby?color=191F28" alt="License" />
-  <img src="https://img.shields.io/badge/for-SKKU_iCampus-0F6E46" alt="for SKKU iCampus" />
+  <img src="https://img.shields.io/badge/status-Demo-F76707" alt="Demo" />
+  <img src="https://img.shields.io/badge/for-SKKU_GBA_(일부_학생)-0F6E46" alt="for SKKU GBA" />
 </p>
 
 ---
@@ -19,6 +20,8 @@
 ## 소개
 
 **iSubby**는 학습용으로 만든 SRT 자막을 iCampus 강의 플레이어 위에 겹쳐 보여줍니다. 관리자가 올린 공유 자막은 수강생이 강의를 열기만 하면 자동으로 표시됩니다.
+
+> **데모 버전**: SKKU GBA 일부 학생을 위한 데모입니다. 공유 자막은 Business Statistics, Introduction to Financial Accounting, Introduction to Microeconomics 과목에만 제공되며, 기능은 예고 없이 바뀔 수 있습니다.
 
 이름은 iCampus의 **i**와 subtitle을 귀엽게 부른 **Subby**를 합친 것입니다.
 
