@@ -48,13 +48,33 @@
     chrome.storage.local.set({ lectureMeta });
   }
 
-  // ---------- 모두: 목록 복사 막대 ----------
+  // ---------- 모두: 자막 표시 + 목록 복사 막대 (공유 자막을 올리는 과목에서만) ----------
+  const TARGET_COURSES = /business\s*statistics|financial\s*accounting|microeconomics/i;
+
+  // 강의콘텐츠 페이지는 같은 주소(canvas.skku.edu)의 과목 페이지 안에 들어 있어서 과목 이름을 읽을 수 있음
+  function courseName() {
+    const texts = [];
+    for (const w of [window.top, window.parent, window]) {
+      try {
+        const d = w.document;
+        const a = d.querySelector(`#breadcrumbs a[href$="/courses/${data.courseId}"], a[href$="/courses/${data.courseId}"]`);
+        texts.push(a ? a.textContent : "", d.title);
+      } catch {}
+    }
+    return texts.join(" ");
+  }
+
+  let barTries = 0;
   function startBar() {
     if (!data || !document.body) {
       if (!document.body) document.addEventListener("DOMContentLoaded", startBar, { once: true });
       return;
     }
     if (bar && bar.isConnected) return;
+    if (!TARGET_COURSES.test(courseName())) {
+      if (++barTries < 6) setTimeout(startBar, 1000); // 과목 페이지가 늦게 그려질 수 있음
+      return;
+    }
     bar = document.createElement("div");
     bar.className = "isb-bar";
     bar.append(el("span", "isb-logo", "iSubby"), el("span", "isb-bar-t", "다른 분반이라 자막이 안 뜨면, 이 목록을 자막 올리는 사람에게 보내주세요."));
@@ -72,6 +92,26 @@
     bar.append(b);
     placeEl(bar);
     watchList();
+    checkUser();
+  }
+
+  // 일반 사용자: 이 강의에서 실제로 자막이 뜨는지 (자기 ID, 분반 연결 파일, 자동 연결 순)
+  async function checkUser() {
+    let next = 0;
+    const items = data.items.filter((it, i, a) => a.findIndex((x) => x.contentId === it.contentId) === i);
+    const worker = async () => {
+      while (next < items.length) {
+        const it = items[next++];
+        let st = await ICS.checkShared(it.contentId);
+        if (st !== "found" && it.duration) { // [자동 연결]
+          const fp = await ICS.checkFingerprint(it.videoTitle || it.title, it.duration);
+          if (fp === "found") st = "found";
+        }
+        status[it.contentId] = st;
+        renderBadges();
+      }
+    };
+    await Promise.all(Array.from({ length: 5 }, worker));
   }
 
   // ---------- 업로드 여부 확인 ----------
@@ -209,6 +249,7 @@
       if (!it) continue;
       const st = status[it.contentId] || "checking";
       let b = a.nextElementSibling;
+      if (!admin && st !== "found") continue; // 일반 사용자에게는 자막 있는 강의만 표시
       if (!b || !b.classList.contains("isb-badge")) {
         b = document.createElement("span");
         a.after(b);
@@ -233,7 +274,7 @@
         for (const node of [card, bar]) {
           if (node && (!node.isConnected || (hasHeader && node.parentNode === document.body))) placeEl(node);
         }
-        if (admin) renderBadges();
+        renderBadges();
       });
     });
     observer.observe(document.body, { childList: true, subtree: true });

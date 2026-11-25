@@ -9,7 +9,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white" alt="Chrome Extension" />
   <img src="https://img.shields.io/badge/Manifest-V3-34A853" alt="Manifest V3" />
-  <img src="https://img.shields.io/badge/version-1.7.0-3182F6" alt="version 1.7.0" />
+  <img src="https://img.shields.io/badge/version-1.7.1-3182F6" alt="version 1.7.1" />
   <img src="https://img.shields.io/github/license/joony06/iSubby?color=191F28" alt="License" />
   <img src="https://img.shields.io/badge/for-SKKU_iCampus-0F6E46" alt="for SKKU iCampus" />
 </p>
@@ -34,6 +34,7 @@
 - **인코딩 자동 판별**: UTF-8과 EUC-KR(CP949) SRT 모두 읽음
 - **자막 목록 패널**: 플레이어 오른쪽에 전체 자막을 대본처럼 표시. 지금 줄 하이라이트, 줄을 누르면 그 시점으로 이동, 키워드 검색
 - **상황별 안내**: 플레이어를 못 찾거나 강의를 식별하지 못하면 이유와 해결 방법을 알려줌
+- **강의 목록에 자막 표시**: Business Statistics, Financial Accounting, Microeconomics 과목의 강의콘텐츠 페이지에서 자막이 있는 강의에 "자막 ✓" 표시
 - **분반 연결**: 같은 녹화본인데 분반마다 영상 ID가 다른 강의도 다른 분반에서 올린 자막을 찾아 적용
 - **SRT 한꺼번에 올리기 (관리자)**: 여러 SRT를 한 번에 골라 강의별로 암호화한 파일을 zip 하나로 받음
 
@@ -193,7 +194,7 @@ iSubby/
 | `raw.githubusercontent.com` | 공유 자막 파일 조회 |
 | `activeTab` | 팝업을 열었을 때 현재 탭 주소를 보고 상황별 안내 (강의 페이지인지 등) |
 | `lcms.skku.edu` (content script) | 강의 플레이어에 자막 표시 |
-| `canvas.skku.edu/learningx/lti/modulebuilder` (content script) | 강의콘텐츠 페이지에 목록 복사 버튼 표시, 분반 자동 연결용 강의 제목·길이 저장(이 컴퓨터에만), 관리자 모드에서 업로드 현황·한꺼번에 올리기·분반 연결 |
+| `canvas.skku.edu/learningx/lti/modulebuilder` (content script) | 공유 자막 과목(Business Statistics, Financial Accounting, Microeconomics)의 강의콘텐츠 페이지에 "자막 ✓" 표시와 목록 복사 버튼, 분반 자동 연결용 강의 제목·길이 저장(이 컴퓨터에만), 관리자 모드에서 업로드 현황·한꺼번에 올리기·분반 연결 |
 
 확장은 위 범위 밖의 페이지에 접근하지 않으며, 개인정보를 수집하거나 외부로 전송하지 않습니다.
 
@@ -201,6 +202,7 @@ iSubby/
 
 ## 버전 기록
 
+- **1.7.1**: 일반 사용자도 공유 자막 과목의 강의 목록에서 "자막 ✓" 표시를 봄 (목록 복사 막대도 이 과목에서만)
 - **1.7.0**: 분반 연결(목록 복사·비교, 자동 연결), SRT 한꺼번에 올리기
 - **1.6.1**: 강의콘텐츠 페이지의 관리자 카드가 상단 고정 바에 가려지던 문제 수정
 - **1.6.0**: 자막 목록 패널(하이라이트·클릭 이동·검색), 상황별 안내, 관리자용 과목별 업로드 현황
