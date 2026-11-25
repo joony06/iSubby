@@ -18,6 +18,11 @@
   let lastKey = "";
   let nativeTrack = null; // 비디오 자체가 전체화면일 때 쓰는 대체 트랙
   let toastUntil = 0;
+  let idFailed = false; // 영상은 찾았지만 강의 ID를 읽지 못함 (학교 플레이어 구조 변경 가능성)
+
+  // 자막 목록 패널
+  let panel = null, panelBtn = null, listEl = null, searchEl = null, countEl = null;
+  let panelOpen = false, rows = [], activeIdx = -1, listDirty = true, userScrollUntil = 0;
 
   // ---------- 콘텐츠 식별 ----------
   function detectContentId() {
@@ -37,6 +42,7 @@
     else if (sharedCues.length) { cues = sharedCues; source = "shared"; }
     else { cues = []; source = ""; }
     lastKey = "";
+    listDirty = true;
     rebuildNativeTrack();
   }
 
@@ -109,12 +115,18 @@
 
     // 비디오 요소 자체가 전체화면이면 DOM 오버레이는 안 보이므로 기본 트랙 사용
     const videoItselfFs = fs === video;
-    overlay.style.display = videoItselfFs || !settings.visible ? "none" : "";
+    overlay.style.display = videoItselfFs ? "none" : "";
     if (nativeTrack) nativeTrack.mode = videoItselfFs && settings.visible ? "showing" : "hidden";
   }
 
   function render() {
     const t = video.currentTime - offset;
+    if (panelOpen) updateActiveRow(t);
+    if (!settings.visible) {
+      box.style.visibility = "hidden";
+      lastKey = "";
+      return;
+    }
     const active = SRT.activeCues(cues, t);
     const key = active.map((c) => c.start).join("|");
     if (key === lastKey) return;
@@ -134,7 +146,9 @@
   function loop() {
     if (video && video.isConnected && cues.length) {
       ensureOverlay();
+      ensurePanel();
       placeOverlay();
+      if (listDirty) buildList();
       render();
     } else if (overlay && Date.now() > toastUntil) {
       overlay.style.display = "none";
@@ -169,10 +183,12 @@
     sharedCues = [];
     contentId = detectContentId();
     if (!contentId) {
+      if (v.readyState >= 1) { idFailed = true; return; } // 이미 로드됐는데도 못 읽음
       // src가 아직 없으면 로드된 뒤 다시 시도
       v.addEventListener("loadedmetadata", () => { video = null; attach(v); }, { once: true });
       return;
     }
+    idFailed = false;
     await loadSaved();
     loadShared();
   }
@@ -199,11 +215,16 @@
     await save();
     rebuildNativeTrack();
     lastKey = "";
+    listDirty = true;
   }
 
   // ---------- 팝업과 통신 ----------
   chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
-    if (!video || !contentId) return false; // 비디오 없는 프레임은 응답하지 않음
+    if (!video) return false; // 비디오 없는 프레임은 응답하지 않음
+    if (!contentId) {
+      sendResponse({ ok: false, reason: idFailed ? "no-id" : "loading" });
+      return false;
+    }
 
     const status = () => ({
       ok: true,
@@ -214,6 +235,7 @@
       localCount: localCues.length,
       sharedCount: sharedCues.length,
       offset,
+      panelOpen,
     });
 
     (async () => {
@@ -244,6 +266,9 @@
         case "export":
           extra = { cues: localCues };
           break;
+        case "togglePanel":
+          if (cues.length) togglePanel();
+          break;
       }
       sendResponse({ ...status(), ...extra });
     })();
@@ -262,6 +287,8 @@
     } else if (e.key === "S" && e.shiftKey) {
       settings.visible = !settings.visible;
       chrome.storage.local.set({ settings });
+    } else if (e.code === "KeyT" && !e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
+      togglePanel();
     }
   });
 
@@ -285,6 +312,136 @@
     await setLocal(parsed, f.name);
     flash(`자막 ${cues.length}개 불러옴`);
   }, true);
+
+  // ---------- 자막 목록 패널 ----------
+  const fmtTime = (sec) => {
+    sec = Math.max(0, Math.floor(sec));
+    const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), x = sec % 60;
+    const mm = String(m).padStart(h ? 2 : 1, "0"), ss = String(x).padStart(2, "0");
+    return h ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
+  };
+
+  function ensurePanel() {
+    if (panel) return;
+    panelBtn = document.createElement("button");
+    panelBtn.className = "srt-ov-btn";
+    panelBtn.type = "button";
+    panelBtn.title = "자막 목록 (T)";
+    panelBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h8M4 6h.01M4 12h.01M4 18h.01"/></svg>';
+    panelBtn.addEventListener("click", (e) => { e.stopPropagation(); togglePanel(); });
+
+    panel = document.createElement("div");
+    panel.className = "srt-ov-panel";
+    panel.innerHTML =
+      '<div class="srt-ov-ph"><b>자막 목록</b><span class="srt-ov-count"></span>' +
+      '<button type="button" class="srt-ov-x" title="닫기 (T)">✕</button></div>' +
+      '<div class="srt-ov-search"><input type="search" placeholder="자막 검색" spellcheck="false" /></div>' +
+      '<div class="srt-ov-list"></div>';
+    listEl = panel.querySelector(".srt-ov-list");
+    searchEl = panel.querySelector("input");
+    countEl = panel.querySelector(".srt-ov-count");
+    panel.querySelector(".srt-ov-x").addEventListener("click", () => togglePanel(false));
+
+    // 패널 안에서 누른 키·클릭이 플레이어 단축키로 가지 않게
+    for (const ev of ["keydown", "keyup", "keypress"]) panel.addEventListener(ev, (e) => {
+      if (ev === "keydown" && e.key === "Escape") { if (searchEl.value) { searchEl.value = ""; applyFilter(); } else togglePanel(false); }
+      e.stopPropagation();
+    });
+    for (const ev of ["click", "dblclick", "mousedown", "pointerdown", "wheel"]) panel.addEventListener(ev, (e) => e.stopPropagation());
+    searchEl.addEventListener("input", applyFilter);
+    listEl.addEventListener("scroll", () => { if (!listEl._auto) userScrollUntil = Date.now() + 4000; listEl._auto = false; });
+    listEl.addEventListener("click", (e) => {
+      const row = e.target.closest(".srt-ov-row");
+      if (!row || !video) return;
+      const c = cues[+row.dataset.i];
+      video.currentTime = Math.max(0, c.start + offset + 0.01);
+      userScrollUntil = 0;
+    });
+    overlay.append(panelBtn, panel);
+  }
+
+  function buildList() {
+    listDirty = false;
+    if (!listEl) return;
+    listEl.textContent = "";
+    rows = cues.map((c, i) => {
+      const r = document.createElement("div");
+      r.className = "srt-ov-row";
+      r.dataset.i = i;
+      const t = document.createElement("span");
+      t.className = "srt-ov-time";
+      t.textContent = fmtTime(c.start + offset);
+      const x = document.createElement("span");
+      x.className = "srt-ov-text";
+      x._raw = c.text.replace(/\s*\n\s*/g, " ");
+      x.textContent = x._raw;
+      r.append(t, x);
+      listEl.appendChild(r);
+      return r;
+    });
+    activeIdx = -1;
+    applyFilter();
+  }
+
+  function applyFilter() {
+    if (!searchEl) return;
+    const q = searchEl.value.trim().toLowerCase();
+    let n = 0;
+    for (const r of rows) {
+      const x = r.lastChild, raw = x._raw;
+      const hit = !q || raw.toLowerCase().includes(q);
+      r.hidden = !hit;
+      if (hit) n++;
+      // 검색어 강조 (textContent로만 넣어서 안전하게)
+      x.textContent = "";
+      if (!q || !hit) { x.textContent = raw; continue; }
+      let i = 0, low = raw.toLowerCase();
+      while (i < raw.length) {
+        const j = low.indexOf(q, i);
+        if (j < 0) { x.append(raw.slice(i)); break; }
+        if (j > i) x.append(raw.slice(i, j));
+        const m = document.createElement("mark");
+        m.textContent = raw.slice(j, j + q.length);
+        x.append(m);
+        i = j + q.length;
+      }
+    }
+    countEl.textContent = q ? `${n}개 찾음` : `${rows.length}줄`;
+    if (!q) { userScrollUntil = 0; scrollToActive(true); }
+  }
+
+  function updateActiveRow(t) {
+    // 지금 시점 이전에 시작한 마지막 자막
+    let lo = 0, hi = cues.length - 1, idx = -1;
+    while (lo <= hi) { const mid = (lo + hi) >> 1; if (cues[mid].start <= t) { idx = mid; lo = mid + 1; } else hi = mid - 1; }
+    if (idx === activeIdx) return;
+    if (rows[activeIdx]) rows[activeIdx].classList.remove("on");
+    activeIdx = idx;
+    if (rows[idx]) rows[idx].classList.add("on");
+    scrollToActive(false);
+  }
+
+  function scrollToActive(force) {
+    const r = rows[activeIdx];
+    if (!r || r.hidden || !listEl) return;
+    if (!force && (Date.now() < userScrollUntil || searchEl.value.trim())) return;
+    listEl._auto = true;
+    listEl.scrollTop = r.offsetTop - listEl.clientHeight / 2 + r.offsetHeight / 2;
+  }
+
+  function togglePanel(force) {
+    if (!cues.length) return;
+    ensureOverlay();
+    ensurePanel();
+    if (listDirty) buildList();
+    panelOpen = typeof force === "boolean" ? force : !panelOpen;
+    overlay.classList.toggle("panel-open", panelOpen);
+    if (panelOpen) {
+      activeIdx = -1;
+      userScrollUntil = 0;
+      if (video) updateActiveRow(video.currentTime - offset);
+    }
+  }
 
   function flash(text) {
     ensureOverlay();

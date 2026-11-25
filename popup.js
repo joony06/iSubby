@@ -2,6 +2,8 @@
 const DEFAULTS = { fontSize: 22, bottom: 12, bg: 0.6, visible: true };
 const $ = (id) => document.getElementById(id);
 let tabId = null;
+let tabUrl = "";
+const GUIDE_URL = "https://joony06.github.io/iSubby/#contact";
 let lastStatus = null;
 let adminOn = false;
 
@@ -28,6 +30,7 @@ function showStatus(st) {
     $("noPlayer").hidden = false;
     $("player").hidden = true;
     $("clearRow").hidden = true;
+    showEmpty(st);
     return;
   }
   $("noPlayer").hidden = true;
@@ -55,6 +58,8 @@ function showStatus(st) {
   // 공유 자막을 보는 중에도 내 파일로 바꿀 수 있게 불러오기 버튼은 항상 노출
   $("pick").textContent = has ? "다른 자막 불러오기" : "SRT 파일 불러오기";
   $("syncCard").hidden = !has;
+  $("panelBtn").hidden = !has;
+  $("panelBtnText").textContent = st.panelOpen ? "자막 목록 닫기" : "자막 목록 열기";
   $("clearRow").hidden = !st.localCount;
   $("offset").textContent = (st.offset > 0 ? "+" : st.offset < 0 ? "−" : "") + Math.abs(st.offset).toFixed(1);
 }
@@ -112,6 +117,31 @@ function setShared(cls, text) {
   $("sharedText").textContent = text;
 }
 
+// 플레이어를 못 찾았을 때 상황별 안내
+function showEmpty(st) {
+  const onCanvas = /^https:\/\/(canvas|icampus)\.skku\.edu\//.test(tabUrl);
+  let title = "강의 영상을 열어주세요";
+  let text = "iCampus 강의 영상 페이지에서<br />자막을 띄울 수 있어요";
+  let help = false;
+  if (st && st.reason === "no-id") {
+    title = "강의를 알아보지 못했어요";
+    text = "영상은 찾았는데 어떤 강의인지 읽지 못했어요.<br />학교 플레이어가 바뀐 것 같아요. 알려주시면 고칠게요.";
+    help = true;
+  } else if (st && st.reason === "loading") {
+    title = "영상을 불러오는 중이에요";
+    text = "영상이 뜬 뒤 다시 열어주세요";
+  } else if (onCanvas && /\/modules\/items\/|lecture_attendance/.test(tabUrl)) {
+    title = "강의 영상을 찾지 못했어요";
+    text = "영상이 있는 강의라면 영상이 뜬 뒤<br />페이지를 새로고침해 보세요";
+    help = true;
+  } else if (onCanvas) {
+    text = "강의 목록에서 영상을 열면<br />자막을 띄울 수 있어요";
+  }
+  $("emptyTitle").textContent = title;
+  $("emptyText").innerHTML = text; // 위 고정 문구만 사용
+  $("helpLink").hidden = !help;
+}
+
 const stripExt = (n) => n.replace(/\.(srt|vtt)$/i, "");
 
 // ---------- 파일 불러오기 ----------
@@ -148,6 +178,12 @@ function paintPreview(s) {
 async function init() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   tabId = tab && tab.id;
+  tabUrl = (tab && tab.url) || "";
+  $("helpLink").addEventListener("click", (e) => { e.preventDefault(); chrome.tabs.create({ url: GUIDE_URL }); });
+  $("panelBtn").addEventListener("click", async () => {
+    const st = await send({ type: "togglePanel" });
+    if (st) { showStatus(st); window.close(); } // 패널을 바로 볼 수 있게 팝업 닫기
+  });
   showStatus(tabId ? await send({ type: "status" }) : null);
 
   // 파일 선택

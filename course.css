@@ -1,0 +1,42 @@
+/* iSubby — Copyright (c) 2026 AePhroDeChi. MIT License. */
+/* 관리자 전용: 강의콘텐츠 페이지의 공유 자막 현황 */
+.isb-card {
+  margin: 12px 16px; padding: 14px 16px; border-radius: 14px;
+  background: #f9fafb; border: 1.5px dashed #c9d2dc; color: #191f28;
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+.isb-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.isb-logo { font-weight: 800; }
+.isb-tag { font-size: 11px; font-weight: 700; color: #3182f6; background: #e8f3ff; padding: 1px 8px; border-radius: 99px; }
+.isb-sum { flex: 1; color: #4e5968; font-weight: 600; }
+.isb-btn {
+  border: 0; background: #eef1f4; color: #4e5968; font: inherit; font-size: 12px; font-weight: 600;
+  padding: 5px 10px; border-radius: 8px; cursor: pointer;
+}
+.isb-btn:hover { background: #e2e6ea; color: #191f28; }
+.isb-card.folded .isb-body { display: none; }
+.isb-body { margin-top: 10px; display: grid; gap: 8px; }
+.isb-week { display: grid; grid-template-columns: 64px 1fr; gap: 8px; align-items: start; }
+.isb-wname { font-size: 12px; font-weight: 700; color: #6b7684; padding-top: 4px; }
+.isb-items { display: flex; flex-wrap: wrap; gap: 6px; }
+.isb-item {
+  display: inline-flex; align-items: center; gap: 6px; max-width: 100%;
+  padding: 3px 10px; border-radius: 99px; background: #fff; border: 1px solid #e5e8eb;
+  color: #333d4b !important; text-decoration: none !important; font-size: 13px;
+}
+.isb-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 320px; }
+.isb-item:hover { border-color: #3182f6; }
+.isb-item i { width: 8px; height: 8px; border-radius: 50%; background: #b0b8c1; flex: none; }
+.isb-item.found i { background: #1bc47d; }
+.isb-item.none i { background: #ff9f29; }
+.isb-item.error i { background: #f04452; }
+
+.isb-badge {
+  display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 99px; vertical-align: middle;
+  font: 600 11px/1.6 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  background: #f2f4f6; color: #8b95a1;
+}
+.isb-badge.found { background: #e6f8ef; color: #12a364; }
+.isb-badge.none { background: #fff3e0; color: #d97a00; }
+.isb-badge.error { background: #ffeeee; color: #e42939; }
