@@ -85,7 +85,18 @@
       card.classList.toggle("folded", !!courseCardFolded);
       card.querySelector(".isb-fold").textContent = courseCardFolded ? "펼치기" : "접기";
     });
-    document.body.prepend(card);
+    placeCard();
+  }
+
+  // 아캠 강의콘텐츠 페이지는 주차 번호·"모두 펼치기"가 있는 상단 바가 화면 위에 고정돼 있어서,
+  // 카드를 그 바 아래(주차 목록 바로 위)에 넣어야 가려지지 않음
+  function placeCard() {
+    const header = document.querySelector(".xnmb-module-list > .xnmb-header");
+    if (header) {
+      if (card.previousElementSibling !== header) header.after(card);
+    } else if (card.parentNode !== document.body) {
+      document.body.prepend(card);
+    }
   }
 
   function renderAll() {
@@ -163,7 +174,12 @@
     observer = new MutationObserver(() => {
       if (queued) return;
       queued = true;
-      requestAnimationFrame(() => { queued = false; renderBadges(); });
+      requestAnimationFrame(() => {
+        queued = false;
+        // 페이지가 목록을 다시 그리면서 카드가 빠지거나 위치가 바뀌면 다시 제자리에
+        if (card && (!card.isConnected || (document.querySelector(".xnmb-module-list > .xnmb-header") && card.parentNode === document.body))) placeCard();
+        renderBadges();
+      });
     });
     observer.observe(document.body, { childList: true, subtree: true });
   }

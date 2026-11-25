@@ -9,7 +9,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white" alt="Chrome Extension" />
   <img src="https://img.shields.io/badge/Manifest-V3-34A853" alt="Manifest V3" />
-  <img src="https://img.shields.io/badge/version-1.6.0-3182F6" alt="version 1.6.0" />
+  <img src="https://img.shields.io/badge/version-1.6.1-3182F6" alt="version 1.6.1" />
   <img src="https://img.shields.io/github/license/joony06/iSubby?color=191F28" alt="License" />
   <img src="https://img.shields.io/badge/for-SKKU_iCampus-0F6E46" alt="for SKKU iCampus" />
 </p>
@@ -183,6 +183,7 @@ iSubby/
 
 ## 버전 기록
 
+- **1.6.1**: 강의콘텐츠 페이지의 관리자 카드가 상단 고정 바에 가려지던 문제 수정
 - **1.6.0**: 자막 목록 패널(하이라이트·클릭 이동·검색), 상황별 안내, 관리자용 과목별 업로드 현황
 - **1.5.1**: 페이지를 연 뒤 올라온 공유 자막도 "다시 확인"이나 "내 자막 삭제" 때 바로 받아오도록 수정
 - **1.5.0**: 관리자 카드 추가 (콘텐츠 ID 복사, 공유 자막 업로드 여부 확인, 업로드 페이지 바로가기), MIT 라이선스 추가
