@@ -22,6 +22,6 @@ iSubby(이하 "확장")는 성균관대학교 iCampus 강의 영상 위에 자�
 확장은 `lcms.skku.edu` 의 강의 플레이어 화면에서만 동작하며, 그 외 웹페이지의 내용을 읽거나 변경하지 않습니다.
 
 ## 문의
-GitHub 저장소의 Issues를 통해 문의할 수 있습니다: https://github.com/joony06/iSubby/issues
+이메일(joon2.1022@gmail.com) 또는 GitHub 저장소의 Issues(https://github.com/joony06/iSubby/issues)로 문의할 수 있습니다.
 
 © 2026 AePhroDeChi

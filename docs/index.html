@@ -59,6 +59,7 @@
     .btn:active { transform: scale(.98); }
     .btn.primary { background: var(--blue); color: #fff; min-width: 280px; }
     .btn.primary:hover { background: var(--blue-press); }
+    .btn.mail { min-width: 0; }
     .btn.ghost { background: var(--card); color: var(--hint); height: 44px; font-size: 14px; cursor: default; }
     .meta { font-size: 13px; color: var(--hint); }
     .chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 18px; }
@@ -278,10 +279,20 @@
         <p>아니요. 불러온 자막과 설정은 내 브라우저에만 저장돼요. 자세한 내용은 <a href="https://github.com/joony06/iSubby/blob/main/PRIVACY.md">개인정보처리방침</a>을 확인하세요.</p>
       </details>
     </section>
+
+    <section id="contact">
+      <h2>문의하기</h2>
+      <p class="lead">설치가 안 되거나, 자막이 틀렸거나, 바라는 기능이 있으면 편하게 메일 주세요.</p>
+      <a class="btn primary mail" id="mailBtn" href="#contact">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        <span class="mailText">메일 보내기</span>
+      </a>
+      <p class="meta" style="margin-top:10px">받는 사람: <span class="mailText" id="mailPlain">joon2.1022 [at] gmail.com</span></p>
+    </section>
   </main>
 
   <footer class="wrap">
-    © 2026 AePhroDeChi · <a href="https://github.com/joony06/iSubby">GitHub</a> · <a href="https://github.com/joony06/iSubby/blob/main/PRIVACY.md">개인정보처리방침</a><br />
+    © 2026 AePhroDeChi · <a href="#contact">문의</a> · <a href="https://github.com/joony06/iSubby">GitHub</a> · <a href="https://github.com/joony06/iSubby/blob/main/PRIVACY.md">개인정보처리방침</a><br />
     iSubby는 성균관대학교의 공식 서비스가 아닌, 학생이 만든 개인 프로젝트입니다.
   </footer>
 
@@ -293,6 +304,11 @@
     const VERSION = "1.5.1";
 
     const $ = (id) => document.getElementById(id);
+
+    // 이메일 주소는 단순 수집 봇이 읽지 못하도록 조립해서 넣음
+    const MAIL = ["joon2.1022", "gmail.com"].join("@");
+    $("mailBtn").href = "mailto:" + MAIL + "?subject=" + encodeURIComponent("[iSubby 문의] ");
+    $("mailPlain").textContent = MAIL;
     $("ver").textContent = `v${VERSION} · 무료 · PC 전용`;
     if (STORE_URL) {
       const d = $("download");
