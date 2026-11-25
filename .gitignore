@@ -4,3 +4,5 @@
 *.zip
 .DS_Store
 !docs/iSubby.zip
+# 원본 스크린샷(개인 정보 포함)은 올리지 않음 — 가공한 step-*.png만 공개
+docs/img/0*.png

@@ -131,6 +131,15 @@
     .zipdemo .file .ic { width: 52px; height: 52px; border-radius: 10px; display: grid; place-items: center; margin: 0 auto 6px; font-size: 26px; background: var(--card); }
     .zipdemo .arrow { font-size: 20px; color: var(--hint); }
 
+    /* 실제 화면 사진 */
+    .fig { margin: 0; max-width: 560px; }
+    .fig img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+    .fig figcaption { font-size: 13px; color: var(--hint); margin-top: 8px; }
+    .figs { display: grid; gap: 18px; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 560px; }
+    .pair .fig { max-width: none; }
+    @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
+
     /* 사용법 카드 */
     .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
     @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
@@ -195,11 +204,7 @@
         <div>
           <h3>받은 파일 압축 풀기</h3>
           <p>위 버튼으로 받은 <code>iSubby.zip</code>의 압축을 풀어요.</p>
-          <div class="mock"><div class="zipdemo">
-            <div class="file"><div class="ic">🗜️</div>iSubby.zip</div>
-            <div class="arrow">→</div>
-            <div class="file"><div class="ic">📁</div>iSubby</div>
-          </div></div>
+          <figure class="fig" style="max-width:380px"><img src="img/step-1.png" alt="다운로드 폴더에 iSubby.zip과 압축이 풀린 iSubby 폴더" loading="lazy" /></figure>
           <div class="tip"><b>맥</b>: 다운로드 폴더에서 zip을 더블클릭하면 <code>iSubby</code> 폴더가 생겨요.<br /><b>윈도우</b>: zip을 오른쪽 클릭 → <b>압축 풀기</b> → <b>압축 풀기</b> 버튼.</div>
           <div class="warn">⚠️ 압축 푼 폴더를 <b>문서</b>처럼 지우지 않을 곳으로 옮겨두세요. 이 폴더를 지우면 확장도 함께 사라져요.</div>
         </div>
@@ -216,6 +221,7 @@
             <button data-scheme="edge" aria-pressed="false">엣지</button>
           </div>
           <div class="copy"><code id="extUrl">chrome://extensions</code><button id="copyBtn">복사</button></div>
+          <figure class="fig" style="margin-top:14px"><img src="img/step-2.png" alt="주소창에 chrome://extensions 입력" loading="lazy" /></figure>
           <div class="tip">보안 때문에 이 주소는 링크로 바로 열 수 없어요. 꼭 주소창에 붙여넣어 주세요.</div>
         </div>
       </div>
@@ -225,9 +231,7 @@
         <div>
           <h3>오른쪽 위 "개발자 모드" 켜기</h3>
           <p>스위치를 눌러 파랗게 켜요.</p>
-          <div class="mock">
-            <div class="bar"><span class="title">확장 프로그램</span><span class="toggle hl">개발자 모드 <i></i></span></div>
-          </div>
+          <figure class="fig" style="max-width:420px"><img src="img/step-3.png" alt="오른쪽 위 개발자 모드 스위치" loading="lazy" /></figure>
         </div>
       </div>
 
@@ -236,14 +240,12 @@
         <div>
           <h3>"압축해제된 확장 프로그램 로드" → iSubby 폴더 선택</h3>
           <p>왼쪽 위에 나타난 버튼을 누르고, 1단계에서 압축 푼 <code>iSubby</code> 폴더를 골라 <b>선택</b>을 눌러요.</p>
-          <div class="mock">
-            <div class="body">
-              <span class="m-btn hl">압축해제된 확장 프로그램 로드</span>
-              <span class="m-btn">확장 프로그램 압축</span>
-              <span class="m-btn">업데이트</span>
-            </div>
+          <div class="figs">
+            <figure class="fig"><img src="img/step-4a.png" alt="압축해제된 확장 프로그램 로드 버튼" loading="lazy" /><figcaption>① 왼쪽 위 버튼 누르기</figcaption></figure>
+            <figure class="fig"><img src="img/step-4b.png" alt="폴더 선택 창에서 iSubby 폴더를 고르고 선택" loading="lazy" /><figcaption>② iSubby 폴더를 고르고 오른쪽 아래 "선택"</figcaption></figure>
+            <figure class="fig" style="max-width:400px"><img src="img/step-4c.png" alt="설치된 iSubby 카드" loading="lazy" /><figcaption>③ 목록에 iSubby가 생기면 완료</figcaption></figure>
           </div>
-          <div class="tip">목록에 <b>iSubby</b> 카드가 생기면 설치 완료예요.<br />웨일에서는 버튼 이름이 "압축 해제된 확장앱을 로드합니다"로 보일 수 있어요.</div>
+          <div class="tip">웨일에서는 버튼 이름이 "압축 해제된 확장앱을 로드합니다"로 보일 수 있어요.</div>
         </div>
       </div>
 
@@ -252,13 +254,9 @@
         <div>
           <h3>툴바에 고정하기</h3>
           <p>주소창 오른쪽 퍼즐 조각 아이콘을 누르고, iSubby 옆 핀을 눌러 고정해요.</p>
-          <div class="mock">
-            <div class="tb">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="hl" aria-label="퍼즐 아이콘"><path d="M10 4a2 2 0 1 1 4 0v2h4v4h-2a2 2 0 1 0 0 4h2v4h-4v-2a2 2 0 1 0-4 0v2H6v-4h2a2 2 0 1 0 0-4H6V6h4z"/></svg>
-            </div>
-            <div class="menu">
-              <div><img src="icon.png" alt="" /> iSubby <span class="pin hl">📌</span></div>
-            </div>
+          <div class="pair">
+            <figure class="fig"><img src="img/step-5a.png" alt="퍼즐 아이콘을 누르고 iSubby 옆 핀 누르기" loading="lazy" /><figcaption>퍼즐 아이콘 → 핀 누르기</figcaption></figure>
+            <figure class="fig"><img src="img/step-5b.png" alt="툴바에 고정된 iSubby 아이콘" loading="lazy" /><figcaption>툴바에 iSubby 아이콘이 생겨요</figcaption></figure>
           </div>
         </div>
       </div>
@@ -273,7 +271,7 @@
         <div class="card"><b>싱크 맞추기</b><span>팝업 버튼이나 플레이어를 클릭한 뒤 <kbd>[</kbd> <kbd>]</kbd> 키로 0.5초씩 조절해요.</span></div>
         <div class="card"><b>자막 켜기·끄기</b><span>팝업 오른쪽 위 스위치나 <kbd>Shift</kbd>+<kbd>S</kbd>로 바꿔요.</span></div>
       </div>
-      <div class="shot"><img src="screenshot.png" alt="iSubby 팝업 화면" loading="lazy" /></div>
+      <div class="shot"><img src="img/using.png" alt="강의 영상 위에 자막이 표시된 모습" loading="lazy" /></div>
     </section>
 
     <section id="faq">
