@@ -148,6 +148,19 @@
     .figs { display: grid; gap: 18px; }
     .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 560px; }
     .pair .fig { max-width: none; }
+    .toc { position: fixed; top: 120px; left: max(16px, calc(50% - 380px - 220px)); width: 180px; display: flex; flex-direction: column; gap: 2px; font-size: 14px; z-index: 20; }
+    .toc b { font-size: 12px; color: var(--hint); margin: 0 0 6px 12px; letter-spacing: .04em; }
+    .toc a { color: var(--hint); text-decoration: none; padding: 6px 12px; border-radius: 8px; border-left: 2px solid transparent; }
+    .toc a.sub { padding-left: 24px; font-size: 13px; }
+    .toc a:hover { color: var(--text); background: var(--card); }
+    .toc a.on { color: var(--blue); font-weight: 700; background: var(--card); }
+    .toc-btn { display: none; }
+    section, .feat, #top { scroll-margin-top: 24px; }
+    @media (max-width: 1199px) {
+      .toc { display: none; top: auto; left: auto; right: 16px; bottom: 76px; width: 220px; padding: 10px; border-radius: 16px; background: var(--bg); border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(0,0,0,.18); }
+      .toc.open { display: flex; }
+      .toc-btn { display: block; position: fixed; right: 16px; bottom: 20px; z-index: 21; border: 0; border-radius: 99px; padding: 11px 18px; background: var(--blue); color: #fff; font: inherit; font-size: 14px; font-weight: 700; box-shadow: 0 6px 18px rgba(49,130,246,.35); cursor: pointer; }
+    }
     .feat { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px; align-items: center; margin-top: 36px; }
     .feat.rev > .fig { order: 2; }
     .feat.stack { grid-template-columns: 1fr; gap: 16px; }
@@ -205,7 +218,21 @@
       <button data-theme-choice="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>다크</button>
     </div>
   </div>
-  <header class="wrap">
+
+  <!-- 목차: 넓은 화면은 왼쪽에 고정, 좁은 화면은 오른쪽 아래 버튼 -->
+  <nav class="toc" id="toc" aria-label="목차">
+    <b>목차</b>
+    <a href="#top">처음으로</a>
+    <a href="#install">설치 방법</a>
+    <a href="#use">사용법</a>
+    <a href="#use-video" class="sub">강의 영상에서</a>
+    <a href="#use-list" class="sub">강의콘텐츠 페이지에서</a>
+    <a href="#use-popup" class="sub">툴바 버튼</a>
+    <a href="#faq">자주 묻는 질문</a>
+    <a href="#contact">문의하기</a>
+  </nav>
+  <button type="button" class="toc-btn" id="tocBtn" aria-controls="toc" aria-expanded="false">목차</button>
+  <header class="wrap" id="top">
     <div class="logo-card"><img src="logo.png" alt="iSubby" /></div>
     <div class="scope">for SKKU GBA · 일부 학생</div>
     <h1>아캠 강의 영상 위에<br />자막을 바로</h1>
@@ -349,8 +376,8 @@
       <h2>사용법</h2>
       <p class="lead">아캠에서 강의 영상을 열면 바로 쓸 수 있어요.</p>
 
-      <div class="feat">
-        <figure class="fig"><img src="img/use-panel.png" alt="영상 오른쪽에 자막 목록이 열린 예시 화면" loading="lazy" /><figcaption>예시 화면</figcaption></figure>
+      <div class="feat" id="use-video">
+        <figure class="fig"><img src="img/use-panel.png" alt="영상 오른쪽에 자막 목록이 열린 예시 화면" loading="lazy" /></figure>
         <div class="feat-text">
           <span class="feat-no">1 · 강의 영상에서</span>
           <h3>자막 보고, 대본처럼 훑어보기</h3>
@@ -363,7 +390,7 @@
         </div>
       </div>
 
-      <div class="feat stack">
+      <div class="feat stack" id="use-list">
         <figure class="fig"><img src="img/use-badge.png" alt="강의콘텐츠 목록에서 자막이 있는 강의에 자막 체크 표시" loading="lazy" /></figure>
         <div class="feat-text">
           <span class="feat-no">2 · 강의콘텐츠 페이지에서</span>
@@ -376,7 +403,7 @@
         </div>
       </div>
 
-      <div class="feat">
+      <div class="feat" id="use-popup">
         <figure class="fig" style="max-width:250px"><img src="img/use-empty.png" alt="툴바의 iSubby 팝업 화면과 맨 아래 문의 링크" loading="lazy" /></figure>
         <div class="feat-text">
           <span class="feat-no">3 · 툴바의 iSubby 버튼</span>
@@ -464,6 +491,8 @@
     const STORE_URL = "https://chromewebstore.google.com/detail/eejheefmgclbneojofaepofikbdegaba";
     // 스토어에 게시된 버전. 스토어 심사를 통과할 때마다 바꿔 주세요.
     const STORE_VERSION = "1.5.0";
+    // 스토어에서 심사 중인 버전 (없으면 "")
+    const STORE_REVIEW = "1.7.5";
     const QS = new URLSearchParams(location.search);
     const VERSION = "1.7.8";
 
@@ -479,7 +508,7 @@
     $("storeLink").href = STORE_URL;
     $("storeMeta").textContent = STORE_VERSION === VERSION
       ? `v${STORE_VERSION} · 자동 업데이트`
-      : `v${STORE_VERSION} · 자동 업데이트 (v${VERSION} 심사 중)`;
+      : `v${STORE_VERSION} · 자동 업데이트` + (STORE_REVIEW ? ` (v${STORE_REVIEW} 심사 중)` : "");
 
     // 설치 방법 탭: 스토어 / zip. ?zip, ?store 또는 위 버튼으로 고름
     function showTab(t) {
@@ -491,6 +520,22 @@
     $("storeLink").addEventListener("click", () => showTab("store"));
     $("download").addEventListener("click", () => showTab("zip"));
     showTab(QS.has("zip") ? "zip" : "store");
+
+    // 목차: 지금 보고 있는 칸을 표시하고, 누르면 그 위치로 이동
+    const tocLinks = [...document.querySelectorAll("#toc a")];
+    const targets = tocLinks.map((a) => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+    function markToc() {
+      const y = window.scrollY + window.innerHeight * 0.3;
+      let cur = targets[0];
+      for (const t of targets) if (t.offsetParent !== null && t.getBoundingClientRect().top + window.scrollY <= y) cur = t;
+      tocLinks.forEach((a) => a.classList.toggle("on", a.getAttribute("href") === "#" + cur.id));
+    }
+    window.addEventListener("scroll", markToc, { passive: true });
+    window.addEventListener("resize", markToc);
+    markToc();
+    const tocEl = $("toc"), tocBtn = $("tocBtn");
+    tocBtn.addEventListener("click", () => { const o = tocEl.classList.toggle("open"); tocBtn.setAttribute("aria-expanded", String(o)); });
+    tocLinks.forEach((a) => a.addEventListener("click", () => { tocEl.classList.remove("open"); tocBtn.setAttribute("aria-expanded", "false"); }));
 
     // 화면 모드: 자동(기기 설정) / 라이트 / 다크
     const themeBtns = document.querySelectorAll("[data-theme-choice]");

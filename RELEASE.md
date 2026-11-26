@@ -15,5 +15,5 @@
 
 ## 크롬 웹 스토어
 - 안내 페이지는 스토어 설치와 zip 설치를 둘 다 보여줌 (탭으로 전환, `?zip`이면 zip 탭부터)
-- 스토어 심사를 통과하면 `docs/index.html`의 `STORE_VERSION`을 그 버전으로 바꿈 → "(vX 심사 중)" 표시가 사라짐
+- 스토어에 새 버전을 제출하면 `docs/index.html`의 `STORE_REVIEW`를 그 버전으로, 심사를 통과하면 `STORE_VERSION`을 그 버전으로 바꾸고 `STORE_REVIEW`는 `""`로
 - 스토어에 올릴 zip은 `store/iSubby-<버전>.zip`
