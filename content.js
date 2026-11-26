@@ -385,15 +385,11 @@
       `자막 종류: ${source === "local" ? "내 파일" : "공유 자막"}`,
       `iSubby v${chrome.runtime.getManifest().version}`,
     ].join("\n");
-    const a = document.createElement("a");
-    a.href = `mailto:${mail}?subject=${encodeURIComponent(`[iSubby 자막 오류] ${fmtTime(t)}`)}&body=${encodeURIComponent(body)}`;
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.click();
-    // 메일 앱이 안 열리는 환경을 위해 같은 내용을 복사해 둠
-    navigator.clipboard.writeText(`받는 사람: ${mail}\n\n${body}`).then(
-      () => flash("메일 창이 안 열리면, 신고 내용이 복사돼 있으니 메일에 붙여넣어 주세요"),
-      () => {}
+    const url = `mailto:${mail}?subject=${encodeURIComponent(`[iSubby 자막 오류] ${fmtTime(t)}`)}&body=${encodeURIComponent(body)}`;
+    // 플레이어는 아캠 안의 프레임이라 링크·클립보드가 막혀 있어서, 확장 쪽(background.js)에서 메일 창을 엶
+    chrome.runtime.sendMessage({ type: "openMail", url }).then(
+      () => flash("메일 쓰기 창을 열었어요"),
+      () => flash("메일 창을 열지 못했어요. 팝업 아래 '문의'로 보내 주세요")
     );
   }
 

@@ -9,7 +9,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white" alt="Chrome Extension" />
   <img src="https://img.shields.io/badge/Manifest-V3-34A853" alt="Manifest V3" />
-  <img src="https://img.shields.io/badge/version-1.7.6-3182F6" alt="version 1.7.6" />
+  <img src="https://img.shields.io/badge/version-1.7.7-3182F6" alt="version 1.7.7" />
   <img src="https://img.shields.io/github/license/joony06/iSubby?color=191F28" alt="License" />
   <img src="https://img.shields.io/badge/for-SKKU_GBA_(일부_학생)-0F6E46" alt="for SKKU GBA" />
 </p>
@@ -157,6 +157,7 @@ canvas.skku.edu (Canvas 강의 모듈 페이지)
 ```
 iSubby/
 ├── manifest.json   # 확장 설정 (Manifest V3)
+├── background.js   # 자막 오류 신고 메일 창 열기 (플레이어 프레임에서는 막혀 있어서)
 ├── content.js      # 플레이어 프레임에서 실행: 비디오 탐지, 자막 표시, 단축키, 드래그 앤 드롭
 ├── srt.js          # SRT/VTT 파서, 현재 시점 자막 검색(이진 탐색)
 ├── shared.js       # 공유 자막: 파일명 해시, AES-GCM 암복호화, 저장소 조회
@@ -205,6 +206,7 @@ iSubby/
 
 ## 버전 기록
 
+- **1.7.7**: 자막 오류 신고가 아캠 플레이어 안에서 막히던 문제 수정 (확장 쪽에서 메일 창을 엶)
 - **1.7.6**: 팝업 문의 링크, 자막 목록의 오류 신고 버튼, 데모 표시 제거
 - **1.7.5**: 팝업 로고 옆 DEMO 표시, 맨 아래에 현재 버전 표시
 - **1.7.4**: SRT 한꺼번에 올리기에서 여러 번 나눠 고른 파일이 목록에 쌓이도록, 목록 비우기 버튼 추가
