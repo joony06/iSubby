@@ -9,7 +9,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white" alt="Chrome Extension" />
   <img src="https://img.shields.io/badge/Manifest-V3-34A853" alt="Manifest V3" />
-  <img src="https://img.shields.io/badge/version-1.7.7-3182F6" alt="version 1.7.7" />
+  <img src="https://img.shields.io/badge/version-1.7.8-3182F6" alt="version 1.7.8" />
   <img src="https://img.shields.io/github/license/joony06/iSubby?color=191F28" alt="License" />
   <img src="https://img.shields.io/badge/for-SKKU_GBA_(일부_학생)-0F6E46" alt="for SKKU GBA" />
 </p>
@@ -206,6 +206,7 @@ iSubby/
 
 ## 버전 기록
 
+- **1.7.8**: 강의콘텐츠 페이지에서 PPT·PDF 같은 파일을 영상으로 잘못 세던 문제 수정 (재생 길이가 있는 영상만)
 - **1.7.7**: 자막 오류 신고가 아캠 플레이어 안에서 막히던 문제 수정 (확장 쪽에서 메일 창을 엶)
 - **1.7.6**: 팝업 문의 링크, 자막 목록의 오류 신고 버튼, 데모 표시 제거
 - **1.7.5**: 팝업 로고 옆 DEMO 표시, 맨 아래에 현재 버전 표시

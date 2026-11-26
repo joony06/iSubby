@@ -16,6 +16,10 @@
       for (const it of mod.module_items || []) {
         const cd = it.content_data && it.content_data.item_content_data;
         if (!cd || !cd.content_id) continue;
+        // 영상만: PPT·PDF·강의계획서 같은 파일도 content_id가 있어서, 재생 길이가 있거나 영상 형식인 것만 남김
+        const kind = String(cd.content_type || cd.type || it.content_type || "").toLowerCase();
+        const isVideo = Number(cd.duration) > 0 || /movie|video|mp4|vod|stream/.test(kind);
+        if (!isVideo) continue;
         items.push({
           moduleItemId: it.module_item_id,
           title: it.title,

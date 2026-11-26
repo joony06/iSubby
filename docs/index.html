@@ -148,6 +148,19 @@
     .figs { display: grid; gap: 18px; }
     .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 560px; }
     .pair .fig { max-width: none; }
+    .feat { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px; align-items: center; margin-top: 36px; }
+    .feat.rev > .fig { order: 2; }
+    .feat.stack { grid-template-columns: 1fr; gap: 16px; }
+    .feat.stack .feat-text { order: -1; }
+    .feat .fig { max-width: none; justify-self: center; width: 100%; }
+    .feat-no { font-size: 13px; font-weight: 700; color: var(--blue); }
+    .feat h3 { margin: 6px 0 12px; font-size: 20px; }
+    .feat ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; color: var(--sub); font-size: 15px; line-height: 1.6; }
+    .feat li b { color: var(--text); }
+    .keys { margin-top: 40px; padding: 14px 18px; border-radius: 14px; background: var(--card); display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; font-size: 14px; color: var(--sub); }
+    .keys > b { color: var(--text); }
+    .keys > span { color: var(--hint); font-size: 13px; margin-right: 6px; }
+    @media (max-width: 720px) { .feat { grid-template-columns: 1fr; gap: 16px; } .feat.rev > .fig { order: 0; } }
     .fig.wide { max-width: none; margin-top: 22px; }
     @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
 
@@ -208,7 +221,7 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
           zip 파일로 받기
         </a>
-        <span class="meta" id="ver">v1.7.7 · 최신 버전 · 직접 업데이트</span>
+        <span class="meta" id="ver">v1.7.8 · 최신 버전 · 직접 업데이트</span>
       </div>
     </div>
     <p class="meta" style="margin-top:12px">무료 · PC 전용 · 둘 중 하나만 설치하세요</p>
@@ -333,17 +346,55 @@
     <section id="use">
       <h2>사용법</h2>
       <p class="lead">아캠에서 강의 영상을 열면 바로 쓸 수 있어요.</p>
-      <div class="grid">
-        <div class="card"><b>공유 자막은 자동으로</b><span>자막이 올라와 있는 강의는 영상을 열기만 하면 자막이 떠요.</span></div>
-        <div class="card"><b>내 SRT 띄우기</b><span>SRT 파일을 영상 위로 끌어다 놓거나, 툴바의 iSubby 버튼으로 불러와요.</span></div>
-        <div class="card"><b>싱크 맞추기</b><span>팝업 버튼이나 플레이어를 클릭한 뒤 <kbd>[</kbd> <kbd>]</kbd> 키로 0.5초씩 조절해요.</span></div>
-        <div class="card"><b>자막 켜기·끄기</b><span>팝업 오른쪽 위 스위치나 <kbd>Shift</kbd>+<kbd>S</kbd>로 바꿔요.</span></div>
-        <div class="card"><b>자막 목록 보기</b><span>플레이어 오른쪽 위 목록 버튼이나 <kbd>T</kbd> 키로 전체 자막을 대본처럼 펼쳐요. 줄을 누르면 그 시점으로 이동해요.</span></div>
-        <div class="card"><b>키워드로 찾기</b><span>자막 목록 위 검색창에 단어를 넣으면 그 단어가 나온 부분만 모아 보여줘요. 시험 공부할 때 편해요.</span></div>
+
+      <div class="feat">
+        <figure class="fig"><img src="img/use-panel.png" alt="영상 오른쪽에 자막 목록이 열린 예시 화면" loading="lazy" /><figcaption>예시 화면</figcaption></figure>
+        <div class="feat-text">
+          <span class="feat-no">1 · 강의 영상에서</span>
+          <h3>자막 보고, 대본처럼 훑어보기</h3>
+          <ul>
+            <li><b>공유 자막은 자동으로</b> 떠요. 영상을 열기만 하면 돼요.</li>
+            <li><kbd>T</kbd> 키나 플레이어 오른쪽 위 버튼으로 <b>자막 목록</b>을 펼쳐요. 지금 줄이 강조되고, 줄을 누르면 그 장면으로 이동해요.</li>
+            <li>목록 위 <b>검색창</b>에 단어를 넣으면 그 단어가 나온 부분만 모아 보여줘요. 시험 공부할 때 편해요.</li>
+            <li>자막이 틀렸으면 목록 위 <b>오류 신고</b>로 알려 주세요. 시간과 자막이 자동으로 담겨요.</li>
+          </ul>
+        </div>
       </div>
-      <figure class="fig wide"><img src="img/use-panel.png" alt="영상 오른쪽에 자막 목록이 열린 예시 화면" loading="lazy" /><figcaption>자막 목록: 지금 줄이 강조되고, 줄을 누르면 그 장면으로 이동해요. 틀린 자막은 <b>오류 신고</b>로 알려 주세요. (예시 화면)</figcaption></figure>
-      <figure class="fig wide"><img src="img/use-badge.png" alt="강의콘텐츠 목록에서 자막이 있는 강의에 자막 체크 표시" loading="lazy" /><figcaption>강의콘텐츠 페이지에서 자막이 있는 강의엔 <b>자막 ✓</b>가 붙어요 (Business Statistics · Financial Accounting · Microeconomics)</figcaption></figure>
-      <figure class="fig wide" style="max-width:300px"><img src="img/use-empty.png" alt="툴바의 iSubby 팝업 화면과 맨 아래 문의 링크" loading="lazy" /><figcaption>툴바의 iSubby 버튼: SRT 불러오기, 글자 크기·위치 설정. 맨 아래 <b>문의</b>로 바로 메일을 보낼 수 있어요</figcaption></figure>
+
+      <div class="feat stack">
+        <figure class="fig"><img src="img/use-badge.png" alt="강의콘텐츠 목록에서 자막이 있는 강의에 자막 체크 표시" loading="lazy" /></figure>
+        <div class="feat-text">
+          <span class="feat-no">2 · 강의콘텐츠 페이지에서</span>
+          <h3>자막 있는 강의 한눈에 찾기</h3>
+          <ul>
+            <li>자막이 있는 강의 옆에 <b>자막 ✓</b>가 붙어요.</li>
+            <li>Business Statistics · Financial Accounting · Microeconomics 과목에서 보여요.</li>
+            <li>분반이 달라도 같은 녹화본이면 자막이 떠요. 안 뜨면 위쪽 <b>목록 복사</b>를 눌러 보내 주세요.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feat">
+        <figure class="fig" style="max-width:250px"><img src="img/use-empty.png" alt="툴바의 iSubby 팝업 화면과 맨 아래 문의 링크" loading="lazy" /></figure>
+        <div class="feat-text">
+          <span class="feat-no">3 · 툴바의 iSubby 버튼</span>
+          <h3>내 자막 불러오고 보기 좋게 맞추기</h3>
+          <ul>
+            <li><b>SRT 파일 불러오기</b>를 누르거나, 파일을 영상 위로 끌어다 놓아요.</li>
+            <li>자막이 빠르거나 느리면 <b>싱크</b> 버튼이나 <kbd>[</kbd> <kbd>]</kbd> 키로 0.5초씩 맞춰요.</li>
+            <li>글자 크기·위치·배경 진하기를 바꾸고, 오른쪽 위 스위치나 <kbd>Shift</kbd>+<kbd>S</kbd>로 자막을 켜고 꺼요.</li>
+            <li>궁금한 게 있으면 맨 아래 <b>문의</b>를 눌러 바로 메일을 보내요.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="keys">
+        <b>단축키</b> <span>플레이어를 한 번 클릭한 뒤</span>
+        <div><kbd>[</kbd> <kbd>]</kbd> 싱크 0.5초</div>
+        <div><kbd>Shift</kbd>+<kbd>S</kbd> 자막 켜기·끄기</div>
+        <div><kbd>T</kbd> 자막 목록</div>
+        <div><kbd>Esc</kbd> 목록 닫기</div>
+      </div>
     </section>
 
     <section id="faq">
@@ -412,7 +463,7 @@
     // 스토어에 게시된 버전. 스토어 심사를 통과할 때마다 바꿔 주세요.
     const STORE_VERSION = "1.5.0";
     const QS = new URLSearchParams(location.search);
-    const VERSION = "1.7.7";
+    const VERSION = "1.7.8";
 
     const $ = (id) => document.getElementById(id);
 
