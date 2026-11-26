@@ -547,6 +547,24 @@
     $("download").addEventListener("click", () => showTab("zip"));
     showTab(QS.has("zip") ? "zip" : "store");
 
+    // 페이지 안 이동 링크(#...)는 주소창에 #가 남지 않게 직접 스크롤
+    const cleanUrl = () => history.replaceState(null, "", location.pathname + location.search);
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      const t = document.querySelector(a.getAttribute("href"));
+      if (!t) return;
+      e.preventDefault();
+      t.scrollIntoView({ behavior: "smooth", block: "start" });
+      cleanUrl();
+    });
+    // 다른 곳에서 #주소로 들어왔을 때도 그 위치로 간 뒤 #를 지움
+    if (location.hash) {
+      const t = document.querySelector(location.hash);
+      if (t) requestAnimationFrame(() => t.scrollIntoView({ block: "start" }));
+      cleanUrl();
+    }
+
     // 위 메뉴: 지금 보고 있는 칸을 표시하고, 스크롤하면 아래 선 표시
     const tocLinks = [...document.querySelectorAll(".navlinks a")];
     const targets = tocLinks.map((a) => document.querySelector(a.getAttribute("href"))).filter(Boolean);
