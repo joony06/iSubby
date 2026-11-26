@@ -9,7 +9,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white" alt="Chrome Extension" />
   <img src="https://img.shields.io/badge/Manifest-V3-34A853" alt="Manifest V3" />
-  <img src="https://img.shields.io/badge/version-1.7.4-3182F6" alt="version 1.7.4" />
+  <img src="https://img.shields.io/badge/version-1.7.5-3182F6" alt="version 1.7.5" />
   <img src="https://img.shields.io/github/license/joony06/iSubby?color=191F28" alt="License" />
   <img src="https://img.shields.io/badge/status-Demo-F76707" alt="Demo" />
   <img src="https://img.shields.io/badge/for-SKKU_GBA_(일부_학생)-0F6E46" alt="for SKKU GBA" />
@@ -205,6 +205,7 @@ iSubby/
 
 ## 버전 기록
 
+- **1.7.5**: 팝업 로고 옆 DEMO 표시, 맨 아래에 현재 버전 표시
 - **1.7.4**: SRT 한꺼번에 올리기에서 여러 번 나눠 고른 파일이 목록에 쌓이도록, 목록 비우기 버튼 추가
 - **1.7.3**: SRT 한꺼번에 올리기에 기본 "파일 선택" 버튼이 겹쳐 보이던 문제 수정
 - **1.7.2**: 메일·메신저로 보내 칸이 공백으로 바뀐 강의 목록도 분반 연결에서 읽음

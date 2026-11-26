@@ -60,6 +60,7 @@
     @media (prefers-color-scheme: dark) {
       .brand img { background: #fff; border-radius: 7px; padding: 3px; width: 26px; height: 26px; }
     }
+    .demo { font-size: 10px; font-weight: 700; letter-spacing: .03em; color: #f76707; background: rgba(247, 103, 7, .15); padding: 2px 7px; border-radius: 99px; }
     .admin { font-size: 11px; font-weight: 600; color: var(--blue); background: var(--blue-weak); padding: 2px 8px; border-radius: 99px; }
 
     /* 토글 스위치 */
@@ -190,6 +191,7 @@
     <div class="brand" id="title">
       <img src="icons/icon32.png" alt="" />
       iSubby
+      <span class="demo">DEMO</span>
       <span id="adminBadge" class="admin" hidden>관리자</span>
     </div>
     <label class="switch" title="자막 켜기/끄기 (Shift+S)">
@@ -289,7 +291,7 @@
       <button class="danger" id="clear">내 자막 삭제</button>
     </div>
 
-    <p class="copyright">© 2026 AePhroDeChi</p>
+    <p class="copyright">© 2026 AePhroDeChi · <span id="verText">Demo</span></p>
   </main>
 
   <div class="toast" id="toast"></div>

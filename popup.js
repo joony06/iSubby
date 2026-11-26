@@ -313,3 +313,6 @@ async function init() {
 }
 
 init();
+
+// 맨 아래 저작권 줄에 현재 버전 표시 (manifest에서 읽어서 업데이트마다 자동으로 바뀜)
+document.getElementById("verText").textContent = "Demo v" + chrome.runtime.getManifest().version;
