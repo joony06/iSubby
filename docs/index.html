@@ -395,7 +395,7 @@
       <p class="lead">아캠에서 강의 영상을 열면 바로 쓸 수 있어요.</p>
 
       <div class="feat" id="use-video">
-        <figure class="fig"><img src="img/use-panel.png?v=3" alt="영상 오른쪽에 자막 목록이 열린 예시 화면" loading="lazy" /></figure>
+        <figure class="fig"><img src="img/use-panel.png?v=4" alt="영상 오른쪽에 자막 목록이 열린 예시 화면" loading="lazy" /></figure>
         <div class="feat-text">
           <span class="feat-no">1 · 강의 영상에서</span>
           <h3>자막 보고, 대본처럼 훑어보기</h3>
@@ -403,7 +403,7 @@
             <li><b>공유 자막은 자동으로</b> 떠요. 영상을 열기만 하면 돼요.</li>
             <li><kbd>T</kbd> 키나 플레이어 오른쪽 위 버튼으로 <b>자막 목록</b>을 펼쳐요. 지금 줄이 강조되고, 줄을 누르면 그 장면으로 이동해요.</li>
             <li>목록 위 <b>검색창</b>에 단어를 넣으면 그 단어가 나온 부분만 모아 보여줘요. 시험 공부할 때 편해요.</li>
-            <li>자막이 틀렸으면 목록 위 <b>오류 신고</b>로 알려 주세요. 시간과 자막이 자동으로 담겨요.</li>
+            <li>공유 자막은 <b>AI 음성 인식으로 만들어서</b> 용어·숫자가 가끔 틀릴 수 있어요. 틀린 줄을 누르고 목록 위 <b>오류 신고</b>로 알려 주세요. 시간과 자막이 자동으로 담겨요.</li>
           </ul>
         </div>
       </div>
@@ -472,6 +472,10 @@
         <p>같은 녹화본이라도 분반마다 영상 번호가 달라서 그럴 수 있어요. 아캠 과목의 <b>강의콘텐츠</b> 페이지를 한 번 열면 자막이 있는 강의에 "자막 ✓"가 붙고, 위쪽에 iSubby <b>목록 복사</b> 버튼이 보여요. 눌러서 자막 올리는 사람에게 카톡 등으로 보내주면 우리 분반에도 연결해 드려요. 한 학기에 과목당 한 번이면 돼요.</p>
       </details>
       <details>
+        <summary>자막이 틀린 곳이 있어요</summary>
+        <p>공유 자막은 AI 음성 인식으로 만든 뒤 한 번 다듬은 거라, 전문 용어·숫자·이름이 가끔 틀릴 수 있어요. 숫자나 수식이 중요한 부분은 영상 소리와 강의 자료로 꼭 확인해 주세요. 틀린 줄을 찾으면 자막 목록(<kbd>T</kbd>)에서 그 줄을 누르고 <b>오류 신고</b>를 눌러 주세요. 고쳐서 다시 올릴게요.</p>
+      </details>
+      <details>
         <summary>등록한 뒤에 폴더를 옮겨도 되나요?</summary>
         <p>안 돼요. 크롬은 등록할 때의 폴더 위치에서 파일을 읽어서, 옮기거나 이름을 바꾸면 확장이 꺼져요. 이미 옮겼다면 확장 프로그램 관리 화면에서 iSubby를 <b>삭제</b>하고, 새 위치의 폴더로 4단계를 다시 하세요. 이때 직접 불러온 내 자막과 설정은 초기화되지만, 공유 자막은 다시 자동으로 받아와요.</p>
       </details>
@@ -507,7 +511,7 @@
   <footer class="wrap">
     © 2026 AePhroDeChi · <a href="#contact" id="footMail">문의</a> · <a href="https://github.com/joony06/iSubby">GitHub</a> · <a href="https://github.com/joony06/iSubby/blob/main/PRIVACY.md">개인정보처리방침</a><br />
     iSubby는 성균관대학교의 공식 서비스가 아닌, 학생이 만든 개인 프로젝트입니다.<br />
-    SKKU GBA 일부 학생을 위해 만들었고, 공유 자막은 Business Statistics · Financial Accounting · Microeconomics 과목만 제공해요.
+    SKKU GBA 일부 학생을 위해 만들었고, 공유 자막은 Business Statistics · Financial Accounting · Microeconomics 과목만 제공해요. AI로 만든 자막이라 틀린 곳이 있을 수 있어요.
   </footer>
 
   <div class="toast" id="toast"></div>
@@ -520,7 +524,7 @@
     // 스토어에서 심사 중인 버전 (없으면 "")
     const STORE_REVIEW = "";
     const QS = new URLSearchParams(location.search);
-    const VERSION = "1.7.8";
+    const VERSION = "1.7.9";
 
     const $ = (id) => document.getElementById(id);
 

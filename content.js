@@ -23,6 +23,7 @@
   // 자막 목록 패널
   let panel = null, panelBtn = null, listEl = null, searchEl = null, countEl = null;
   let panelOpen = false, rows = [], activeIdx = -1, listDirty = true, userScrollUntil = 0;
+  let aiNoticeSeen = true; // 저장값을 읽기 전에는 안내를 띄우지 않음
 
   // ---------- 콘텐츠 식별 ----------
   function detectContentId() {
@@ -340,16 +341,27 @@
     panel = document.createElement("div");
     panel.className = "srt-ov-panel";
     panel.innerHTML =
-      '<div class="srt-ov-ph"><b>자막 목록</b><span class="srt-ov-count"></span>' +
-      '<button type="button" class="srt-ov-report" title="지금 강조된 줄의 오류를 메일로 알려주세요. 다른 줄은 먼저 그 줄을 눌러 이동한 뒤 신고하면 돼요.">오류 신고</button>' +
+      '<div class="srt-ov-ph"><b>자막 목록</b><span class="srt-ov-meta"><span class="srt-ov-count"></span>' +
+      '<span class="srt-ov-ai" title="AI 음성 인식으로 만든 자막이라 용어·숫자가 틀릴 수 있어요. 틀린 줄을 눌러 이동한 뒤 오류 신고를 눌러 주세요.">' +
+      '<span class="srt-ov-ai-t">· AI 자막</span><span class="srt-ov-ai-i">i</span></span></span>' +
+      '<button type="button" class="srt-ov-report" title="지금 강조된 줄의 시간과 자막을 담아 메일 창을 열어요. 다른 줄은 먼저 그 줄을 눌러 이동한 뒤 신고하면 돼요.">오류 신고</button>' +
       '<button type="button" class="srt-ov-x" title="닫기 (T)">✕</button></div>' +
       '<div class="srt-ov-search"><input type="search" placeholder="자막 검색" spellcheck="false" /></div>' +
+      '<div class="srt-ov-notice" hidden><p>AI 음성 인식으로 만든 자막이라 용어·숫자가 틀릴 수 있어요. ' +
+      '틀린 줄을 누른 뒤 위의 <b>오류 신고</b>로 알려 주세요.</p><button type="button">알겠어요</button></div>' +
       '<div class="srt-ov-list"></div>';
     listEl = panel.querySelector(".srt-ov-list");
     searchEl = panel.querySelector("input");
     countEl = panel.querySelector(".srt-ov-count");
     panel.querySelector(".srt-ov-x").addEventListener("click", () => togglePanel(false));
     panel.querySelector(".srt-ov-report").addEventListener("click", reportLine);
+    // AI 자막 안내: 공유 자막을 처음 볼 때 한 번만
+    panel.querySelector(".srt-ov-notice button").addEventListener("click", () => {
+      aiNoticeSeen = true;
+      chrome.storage.local.set({ aiNoticeSeen: true });
+      updateAiHint();
+    });
+    chrome.storage.local.get("aiNoticeSeen").then((d) => { aiNoticeSeen = !!d.aiNoticeSeen; updateAiHint(); });
 
     // 패널 안에서 누른 키·클릭이 플레이어 단축키로 가지 않게
     for (const ev of ["keydown", "keyup", "keypress"]) panel.addEventListener(ev, (e) => {
@@ -393,8 +405,16 @@
     );
   }
 
+  // 공유 자막일 때만 "AI 자막" 표시와 첫 안내를 보여줌
+  function updateAiHint() {
+    if (!panel) return;
+    panel.classList.toggle("is-shared", source === "shared");
+    panel.querySelector(".srt-ov-notice").hidden = source !== "shared" || aiNoticeSeen;
+  }
+
   function buildList() {
     listDirty = false;
+    updateAiHint();
     if (!listEl) return;
     listEl.textContent = "";
     rows = cues.map((c, i) => {
