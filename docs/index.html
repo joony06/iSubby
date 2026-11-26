@@ -148,6 +148,7 @@
     .figs { display: grid; gap: 18px; }
     .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 560px; }
     .pair .fig { max-width: none; }
+    .fig.wide { max-width: none; margin-top: 22px; }
     @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
 
     /* 사용법 카드 */
@@ -298,6 +299,8 @@
         <div>
           <h3>"Chrome에 추가" 누르기</h3>
           <p>위의 <b>Chrome에 추가</b> 버튼을 누르면 크롬 웹 스토어의 iSubby 페이지가 열려요. 거기서 다시 <b>Chrome에 추가</b> → <b>확장 프로그램 추가</b>를 누르세요.</p>
+          <figure class="fig"><img src="img/store-1.png" alt="크롬 웹 스토어 iSubby 페이지의 Chrome에 추가 버튼" loading="lazy" /><figcaption>① 오른쪽 위 Chrome에 추가</figcaption></figure>
+          <figure class="fig" style="margin-top:14px;max-width:440px"><img src="img/store-2.png" alt="iSubby을(를) 추가하시겠습니까 확인 창" loading="lazy" /><figcaption>② 확장 프로그램 추가</figcaption></figure>
           <div class="tip">스토어 검색에는 나오지 않는 <b>링크 전용</b> 등록이에요. 이 페이지의 버튼으로 들어가 주세요.</div>
         </div>
       </div>
@@ -318,7 +321,8 @@
         <div class="num">3</div>
         <div>
           <h3>예전에 zip으로 설치했다면 그 iSubby는 삭제</h3>
-          <p>주소창에 <code>chrome://extensions</code>를 입력하고, iSubby가 두 개 보이면 <b>"압축해제된 확장 프로그램"</b>이라고 적힌 쪽을 <b>삭제</b>하세요.</p>
+          <p>주소창에 <code>chrome://extensions</code>를 입력하고, iSubby가 두 개 보이면 <b>새로고침(↻) 버튼이 있는 쪽</b>이 zip으로 설치한 거예요. 그쪽을 <b>삭제</b>하세요.</p>
+          <figure class="fig"><img src="img/store-3.png" alt="확장 프로그램 화면에 iSubby가 두 개 보이고, 새로고침 버튼이 있는 쪽을 삭제" loading="lazy" /><figcaption>↻ 버튼이 있는 iSubby(zip 버전) → 삭제</figcaption></figure>
           <div class="warn">⚠️ 둘 다 켜 두면 자막이 두 번 겹쳐 나와요. 직접 불러온 내 자막은 새로 설치한 쪽으로 옮겨지지 않으니, 필요하면 다시 불러와 주세요. 공유 자막은 그대로 떠요.</div>
           <div class="tip">개발자 모드는 이제 꺼도 돼요. 웨일·엣지도 크롬 웹 스토어에서 설치할 수 있어요(엣지는 "다른 스토어의 확장 허용"을 눌러 주세요).</div>
         </div>
@@ -337,7 +341,9 @@
         <div class="card"><b>자막 목록 보기</b><span>플레이어 오른쪽 위 목록 버튼이나 <kbd>T</kbd> 키로 전체 자막을 대본처럼 펼쳐요. 줄을 누르면 그 시점으로 이동해요.</span></div>
         <div class="card"><b>키워드로 찾기</b><span>자막 목록 위 검색창에 단어를 넣으면 그 단어가 나온 부분만 모아 보여줘요. 시험 공부할 때 편해요.</span></div>
       </div>
-      <div class="shot"><img src="img/popup.png" alt="iSubby 팝업 화면" loading="lazy" /></div>
+      <figure class="fig wide"><img src="img/use-panel.png" alt="영상 오른쪽에 자막 목록이 열린 예시 화면" loading="lazy" /><figcaption>자막 목록: 지금 줄이 강조되고, 줄을 누르면 그 장면으로 이동해요. 틀린 자막은 <b>오류 신고</b>로 알려 주세요. (예시 화면)</figcaption></figure>
+      <figure class="fig wide"><img src="img/use-badge.png" alt="강의콘텐츠 목록에서 자막이 있는 강의에 자막 체크 표시" loading="lazy" /><figcaption>강의콘텐츠 페이지에서 자막이 있는 강의엔 <b>자막 ✓</b>가 붙어요 (Business Statistics · Financial Accounting · Microeconomics)</figcaption></figure>
+      <figure class="fig wide" style="max-width:300px"><img src="img/use-empty.png" alt="툴바의 iSubby 팝업 화면과 맨 아래 문의 링크" loading="lazy" /><figcaption>툴바의 iSubby 버튼: SRT 불러오기, 글자 크기·위치 설정. 맨 아래 <b>문의</b>로 바로 메일을 보낼 수 있어요</figcaption></figure>
     </section>
 
     <section id="faq">
