@@ -99,7 +99,14 @@
     .step h3 { margin: 6px 0 6px; font-size: 19px; }
     .step p { margin: 0 0 12px; color: var(--sub); }
     .tip { background: var(--soft); border-radius: 12px; padding: 12px 14px; font-size: 14px; color: var(--sub); margin-top: 10px; }
-    .test-banner { background: #3182f6; color: #fff; text-align: center; font-size: 13px; font-weight: 600; padding: 8px 16px; }
+    .cta.two { flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 12px; }
+    .opt { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .opt .btn { min-width: 250px; }
+    .btn.sub { background: var(--card); color: var(--text); }
+    .btn.sub:hover { filter: brightness(.96); }
+    .tabs { display: inline-flex; gap: 4px; padding: 4px; border-radius: 12px; background: var(--card); margin: 4px 0 18px; }
+    .tabs button { border: 0; background: transparent; color: var(--hint); font: inherit; font-size: 14px; font-weight: 700; padding: 8px 16px; border-radius: 9px; cursor: pointer; }
+    .tabs button[aria-selected="true"] { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
     .warn { background: var(--warn); color: var(--warn-text); border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-top: 10px; }
 
     /* 복사 박스 */
@@ -169,6 +176,8 @@
     @media (max-width: 560px) {
       .step { grid-template-columns: 1fr; gap: 8px; }
       .btn.primary { min-width: 0; width: 100%; }
+      .cta.two, .opt { width: 100%; }
+      .opt .btn { min-width: 0; width: 100%; }
     }
   </style>
 </head>
@@ -185,14 +194,23 @@
     <div class="scope">for SKKU GBA · 일부 학생</div>
     <h1>아캠 강의 영상 위에<br />자막을 바로</h1>
     <p>SRT 파일을 끌어다 놓으면 끝. 배속·건너뛰기에도 싱크가 맞아요.</p>
-    <div class="cta">
-      <a class="btn primary" id="download" href="iSubby.zip" download>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
-        iSubby 다운로드
-      </a>
-      <span class="meta" id="ver">v1.7.7 · 무료 · PC 전용</span>
-      <span class="btn ghost" id="storeBtn">크롬 웹 스토어 등록 준비 중</span>
+    <div class="cta two">
+      <div class="opt">
+        <a class="btn primary" id="storeLink" href="#install" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          크롬 웹 스토어에서 설치
+        </a>
+        <span class="meta" id="storeMeta">자동 업데이트</span>
+      </div>
+      <div class="opt">
+        <a class="btn sub" id="download" href="iSubby.zip" download>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
+          zip 파일로 받기
+        </a>
+        <span class="meta" id="ver">v1.7.7 · 최신 버전 · 직접 업데이트</span>
+      </div>
     </div>
+    <p class="meta" style="margin-top:12px">무료 · PC 전용 · 둘 중 하나만 설치하세요</p>
     <div class="chips">
       <span class="chip">Chrome</span><span class="chip">네이버 웨일</span><span class="chip">Edge</span><span class="chip">Brave · Arc</span>
     </div>
@@ -201,7 +219,12 @@
   <main class="wrap">
     <section id="install">
       <h2>설치 방법</h2>
-      <p class="lead">처음 한 번만 하면 돼요. 3분이면 끝나요.</p>
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" data-tab="store">크롬 웹 스토어</button>
+        <button type="button" role="tab" data-tab="zip">zip 파일</button>
+      </div>
+      <div class="pane" id="paneZip" hidden>
+      <p class="lead">처음 한 번만 하면 돼요. 3분이면 끝나요. 새 버전이 나오면 다시 받아서 덮어써야 해요.</p>
 
       <div class="step">
         <div class="num">1</div>
@@ -264,11 +287,10 @@
           </div>
         </div>
       </div>
-    </section>
+      </div>
 
-    <!-- 크롬 웹 스토어 설치 (스토어 모드에서만 보임) -->
-    <section id="installStore" hidden>
-      <h2>설치 방법</h2>
+      <!-- 크롬 웹 스토어 설치 -->
+      <div class="pane" id="paneStore" hidden>
       <p class="lead">크롬 웹 스토어에서 버튼 몇 번이면 끝나요. 새 버전도 자동으로 받아요.</p>
 
       <div class="step">
@@ -300,6 +322,7 @@
           <div class="warn">⚠️ 둘 다 켜 두면 자막이 두 번 겹쳐 나와요. 직접 불러온 내 자막은 새로 설치한 쪽으로 옮겨지지 않으니, 필요하면 다시 불러와 주세요. 공유 자막은 그대로 떠요.</div>
           <div class="tip">개발자 모드는 이제 꺼도 돼요. 웨일·엣지도 크롬 웹 스토어에서 설치할 수 있어요(엣지는 "다른 스토어의 확장 허용"을 눌러 주세요).</div>
         </div>
+      </div>
       </div>
     </section>
 
@@ -346,7 +369,7 @@
       </details>
       <details>
         <summary>새 버전은 어떻게 받아요?</summary>
-        <p>이 페이지에서 새 zip을 받아 압축을 풀고, 기존 <code>iSubby</code> 폴더 안의 파일을 새 파일로 바꿔 넣은 뒤 확장 프로그램 관리 화면에서 iSubby의 새로고침(↻) 버튼을 누르세요. 불러온 자막과 설정은 그대로 남아요.</p>
+        <p><b>크롬 웹 스토어로 설치했다면</b> 따로 할 일 없이 자동으로 업데이트돼요(심사를 거쳐서 zip보다 며칠 늦을 수 있어요).<br /><b>zip으로 설치했다면</b> 이 페이지에서 새 zip을 받아 압축을 풀고, 기존 <code>iSubby</code> 폴더 안의 파일을 새 파일로 바꿔 넣은 뒤 확장 프로그램 관리 화면에서 iSubby의 새로고침(↻) 버튼을 누르세요. 불러온 자막과 설정은 그대로 남아요.</p>
       </details>
       <details>
         <summary>휴대폰이나 태블릿에서도 되나요?</summary>
@@ -380,11 +403,9 @@
   <script>
     // 크롬 웹 스토어 등록 후 주소를 넣으면 메인 버튼이 "Chrome에 추가"로 바뀌어요.
     const STORE_URL = "https://chromewebstore.google.com/detail/eejheefmgclbneojofaepofikbdegaba";
-    // 스토어 최신 버전이 통과하면 true로 바꿔 메인 페이지도 스토어 설치로 전환.
-    // 그 전에는 테스트 페이지(/store/ 또는 ?store)에서만 스토어 설치 화면을 보여줌.
-    const STORE_LIVE = false;
+    // 스토어에 게시된 버전. 스토어 심사를 통과할 때마다 바꿔 주세요.
+    const STORE_VERSION = "1.5.0";
     const QS = new URLSearchParams(location.search);
-    const STORE_MODE = (STORE_LIVE && !QS.has("zip")) || QS.has("store");
     const VERSION = "1.7.7";
 
     const $ = (id) => document.getElementById(id);
@@ -395,26 +416,22 @@
     $("mailBtn").href = MAILTO;
     $("footMail").href = MAILTO; // 아래 "문의"를 눌러도 바로 메일 쓰기
     $("mailPlain").textContent = MAIL;
-    $("ver").textContent = `v${VERSION} · 무료 · PC 전용`;
-    if (STORE_MODE) {
-      const d = $("download");
-      d.href = STORE_URL; d.target = "_blank"; d.rel = "noopener"; d.removeAttribute("download");
-      d.lastChild.textContent = " Chrome에 추가";
-      d.querySelector("svg").innerHTML = '<path d="M12 5v14M5 12h14"/>';
-      const s = $("storeBtn");
-      s.textContent = "스토어를 못 쓰면 zip으로 설치하기"; s.style.cursor = "pointer";
-      s.onclick = () => (location.href = "./?zip");
-      $("install").hidden = true;
-      $("installStore").hidden = false;
-      $("ver").textContent = `v${VERSION} · 무료 · 자동 업데이트`;
-      if (!STORE_LIVE) {
-        document.title = "iSubby 설치하기 (스토어 테스트)";
-        const b = document.createElement("div");
-        b.className = "test-banner";
-        b.textContent = "테스트 페이지 · 크롬 웹 스토어 설치 화면 미리보기예요. 스토어에는 이전 버전이 올라가 있을 수 있어요.";
-        document.body.prepend(b);
-      }
+    $("ver").textContent = `v${VERSION} · 최신 버전 · 직접 업데이트`;
+    $("storeLink").href = STORE_URL;
+    $("storeMeta").textContent = STORE_VERSION === VERSION
+      ? `v${STORE_VERSION} · 자동 업데이트`
+      : `v${STORE_VERSION} · 자동 업데이트 (v${VERSION} 심사 중)`;
+
+    // 설치 방법 탭: 스토어 / zip. ?zip, ?store 또는 위 버튼으로 고름
+    function showTab(t) {
+      document.querySelectorAll(".tabs [data-tab]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === t)));
+      $("paneStore").hidden = t !== "store";
+      $("paneZip").hidden = t !== "zip";
     }
+    document.querySelectorAll(".tabs [data-tab]").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
+    $("storeLink").addEventListener("click", () => showTab("store"));
+    $("download").addEventListener("click", () => showTab("zip"));
+    showTab(QS.has("zip") ? "zip" : "store");
 
     // 화면 모드: 자동(기기 설정) / 라이트 / 다크
     const themeBtns = document.querySelectorAll("[data-theme-choice]");

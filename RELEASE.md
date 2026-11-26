@@ -13,6 +13,7 @@
 
 커밋 작성자는 AePhroDeChi, 이메일은 GitHub 비공개 주소를 씁니다.
 
-## 스토어 설치로 전환할 때
-- 스토어 최신 버전이 통과하면 `docs/index.html`의 `STORE_LIVE`를 `true`로 바꿈 → 메인 페이지가 "Chrome에 추가"와 스토어 설치 방법으로 바뀜
-- zip 설치 화면은 `?zip`, 스토어 테스트 화면은 `/store/` (또는 `?store`)
+## 크롬 웹 스토어
+- 안내 페이지는 스토어 설치와 zip 설치를 둘 다 보여줌 (탭으로 전환, `?zip`이면 zip 탭부터)
+- 스토어 심사를 통과하면 `docs/index.html`의 `STORE_VERSION`을 그 버전으로 바꿈 → "(vX 심사 중)" 표시가 사라짐
+- 스토어에 올릴 zip은 `store/iSubby-<버전>.zip`
