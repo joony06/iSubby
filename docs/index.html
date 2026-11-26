@@ -99,6 +99,7 @@
     .step h3 { margin: 6px 0 6px; font-size: 19px; }
     .step p { margin: 0 0 12px; color: var(--sub); }
     .tip { background: var(--soft); border-radius: 12px; padding: 12px 14px; font-size: 14px; color: var(--sub); margin-top: 10px; }
+    .test-banner { background: #3182f6; color: #fff; text-align: center; font-size: 13px; font-weight: 600; padding: 8px 16px; }
     .warn { background: var(--warn); color: var(--warn-text); border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-top: 10px; }
 
     /* 복사 박스 */
@@ -265,6 +266,43 @@
       </div>
     </section>
 
+    <!-- 크롬 웹 스토어 설치 (스토어 모드에서만 보임) -->
+    <section id="installStore" hidden>
+      <h2>설치 방법</h2>
+      <p class="lead">크롬 웹 스토어에서 버튼 몇 번이면 끝나요. 새 버전도 자동으로 받아요.</p>
+
+      <div class="step">
+        <div class="num">1</div>
+        <div>
+          <h3>"Chrome에 추가" 누르기</h3>
+          <p>위의 <b>Chrome에 추가</b> 버튼을 누르면 크롬 웹 스토어의 iSubby 페이지가 열려요. 거기서 다시 <b>Chrome에 추가</b> → <b>확장 프로그램 추가</b>를 누르세요.</p>
+          <div class="tip">스토어 검색에는 나오지 않는 <b>링크 전용</b> 등록이에요. 이 페이지의 버튼으로 들어가 주세요.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">2</div>
+        <div>
+          <h3>툴바에 고정하기</h3>
+          <p>주소창 오른쪽 퍼즐 조각 아이콘을 누르고, iSubby 옆 핀을 눌러 고정해요.</p>
+          <div class="pair">
+            <figure class="fig"><img src="img/step-5a.png" alt="퍼즐 아이콘을 누르고 iSubby 옆 핀 누르기" loading="lazy" /><figcaption>퍼즐 아이콘 → 핀 누르기</figcaption></figure>
+            <figure class="fig"><img src="img/step-5b.png" alt="툴바에 고정된 iSubby 아이콘" loading="lazy" /><figcaption>툴바에 iSubby 아이콘이 생겨요</figcaption></figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">3</div>
+        <div>
+          <h3>예전에 zip으로 설치했다면 그 iSubby는 삭제</h3>
+          <p>주소창에 <code>chrome://extensions</code>를 입력하고, iSubby가 두 개 보이면 <b>"압축해제된 확장 프로그램"</b>이라고 적힌 쪽을 <b>삭제</b>하세요.</p>
+          <div class="warn">⚠️ 둘 다 켜 두면 자막이 두 번 겹쳐 나와요. 직접 불러온 내 자막은 새로 설치한 쪽으로 옮겨지지 않으니, 필요하면 다시 불러와 주세요. 공유 자막은 그대로 떠요.</div>
+          <div class="tip">개발자 모드는 이제 꺼도 돼요. 웨일·엣지도 크롬 웹 스토어에서 설치할 수 있어요(엣지는 "다른 스토어의 확장 허용"을 눌러 주세요).</div>
+        </div>
+      </div>
+    </section>
+
     <section id="use">
       <h2>사용법</h2>
       <p class="lead">아캠에서 강의 영상을 열면 바로 쓸 수 있어요.</p>
@@ -341,7 +379,12 @@
 
   <script>
     // 크롬 웹 스토어 등록 후 주소를 넣으면 메인 버튼이 "Chrome에 추가"로 바뀌어요.
-    const STORE_URL = "";
+    const STORE_URL = "https://chromewebstore.google.com/detail/eejheefmgclbneojofaepofikbdegaba";
+    // 스토어 최신 버전이 통과하면 true로 바꿔 메인 페이지도 스토어 설치로 전환.
+    // 그 전에는 테스트 페이지(/store/ 또는 ?store)에서만 스토어 설치 화면을 보여줌.
+    const STORE_LIVE = false;
+    const QS = new URLSearchParams(location.search);
+    const STORE_MODE = (STORE_LIVE && !QS.has("zip")) || QS.has("store");
     const VERSION = "1.7.7";
 
     const $ = (id) => document.getElementById(id);
@@ -353,12 +396,24 @@
     $("footMail").href = MAILTO; // 아래 "문의"를 눌러도 바로 메일 쓰기
     $("mailPlain").textContent = MAIL;
     $("ver").textContent = `v${VERSION} · 무료 · PC 전용`;
-    if (STORE_URL) {
+    if (STORE_MODE) {
       const d = $("download");
-      d.href = STORE_URL; d.removeAttribute("download"); d.lastChild.textContent = " Chrome에 추가";
+      d.href = STORE_URL; d.target = "_blank"; d.rel = "noopener"; d.removeAttribute("download");
+      d.lastChild.textContent = " Chrome에 추가";
+      d.querySelector("svg").innerHTML = '<path d="M12 5v14M5 12h14"/>';
       const s = $("storeBtn");
       s.textContent = "스토어를 못 쓰면 zip으로 설치하기"; s.style.cursor = "pointer";
-      s.onclick = () => (location.href = "iSubby.zip");
+      s.onclick = () => (location.href = "./?zip");
+      $("install").hidden = true;
+      $("installStore").hidden = false;
+      $("ver").textContent = `v${VERSION} · 무료 · 자동 업데이트`;
+      if (!STORE_LIVE) {
+        document.title = "iSubby 설치하기 (스토어 테스트)";
+        const b = document.createElement("div");
+        b.className = "test-banner";
+        b.textContent = "테스트 페이지 · 크롬 웹 스토어 설치 화면 미리보기예요. 스토어에는 이전 버전이 올라가 있을 수 있어요.";
+        document.body.prepend(b);
+      }
     }
 
     // 화면 모드: 자동(기기 설정) / 라이트 / 다크

@@ -12,3 +12,7 @@
 7. 크롬 웹 스토어용 zip (스토어에 올릴 때)
 
 커밋 작성자는 AePhroDeChi, 이메일은 GitHub 비공개 주소를 씁니다.
+
+## 스토어 설치로 전환할 때
+- 스토어 최신 버전이 통과하면 `docs/index.html`의 `STORE_LIVE`를 `true`로 바꿈 → 메인 페이지가 "Chrome에 추가"와 스토어 설치 방법으로 바뀜
+- zip 설치 화면은 `?zip`, 스토어 테스트 화면은 `/store/` (또는 `?store`)
