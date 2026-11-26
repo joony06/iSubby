@@ -7,3 +7,7 @@
 # 원본 스크린샷(개인 정보 포함)은 올리지 않음 — 가공한 step-*.png만 공개
 docs/img/0*.png
 docs/img/s[0-9]-*.png
+# 개인 작업 기록·분석 결과 (맥 폴더 전용)
+인수인계.md
+analysis/
+store/
