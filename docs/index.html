@@ -83,7 +83,7 @@
     .btn.mail { min-width: 0; }
     .btn.ghost { background: var(--card); color: var(--hint); height: 44px; font-size: 14px; cursor: default; }
     .meta { font-size: 13px; color: var(--hint); }
-    .scope { display: flex; width: fit-content; align-items: center; gap: 6px; margin: 0 auto 14px; padding: 5px 12px 5px 6px; border-radius: 99px; background: var(--card); font-size: 13px; font-weight: 600; color: var(--sub); }
+    .scope { display: flex; width: fit-content; align-items: center; gap: 6px; margin: 0 auto 14px; padding: 5px 12px; border-radius: 99px; background: var(--card); font-size: 13px; font-weight: 600; color: var(--sub); }
     .scope b { padding: 2px 8px; border-radius: 99px; background: rgba(247, 103, 7, .15); color: #f76707; font-size: 12px; letter-spacing: .02em; }
     .chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 18px; }
     .chip { font-size: 13px; color: var(--sub); background: var(--card); padding: 4px 10px; border-radius: 99px; }
@@ -181,7 +181,7 @@
   </div>
   <header class="wrap">
     <div class="logo-card"><img src="logo.png" alt="iSubby" /></div>
-    <div class="scope"><b>DEMO</b>for SKKU GBA · 일부 학생</div>
+    <div class="scope">for SKKU GBA · 일부 학생</div>
     <h1>아캠 강의 영상 위에<br />자막을 바로</h1>
     <p>SRT 파일을 끌어다 놓으면 끝. 배속·건너뛰기에도 싱크가 맞아요.</p>
     <div class="cta">
@@ -189,7 +189,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
         iSubby 다운로드
       </a>
-      <span class="meta" id="ver">v1.7.5 Demo · 무료 · PC 전용</span>
+      <span class="meta" id="ver">v1.7.6 · 무료 · PC 전용</span>
       <span class="btn ghost" id="storeBtn">크롬 웹 스토어 등록 준비 중</span>
     </div>
     <div class="chips">
@@ -334,7 +334,7 @@
   <footer class="wrap">
     © 2026 AePhroDeChi · <a href="#contact" id="footMail">문의</a> · <a href="https://github.com/joony06/iSubby">GitHub</a> · <a href="https://github.com/joony06/iSubby/blob/main/PRIVACY.md">개인정보처리방침</a><br />
     iSubby는 성균관대학교의 공식 서비스가 아닌, 학생이 만든 개인 프로젝트입니다.<br />
-    SKKU GBA 일부 학생을 위한 데모 버전으로, 기능과 자막 제공 과목이 제한적이며 예고 없이 바뀔 수 있어요.
+    SKKU GBA 일부 학생을 위해 만들었고, 공유 자막은 Business Statistics · Financial Accounting · Microeconomics 과목만 제공해요.
   </footer>
 
   <div class="toast" id="toast"></div>
@@ -342,7 +342,7 @@
   <script>
     // 크롬 웹 스토어 등록 후 주소를 넣으면 메인 버튼이 "Chrome에 추가"로 바뀌어요.
     const STORE_URL = "";
-    const VERSION = "1.7.5";
+    const VERSION = "1.7.6";
 
     const $ = (id) => document.getElementById(id);
 
@@ -352,7 +352,7 @@
     $("mailBtn").href = MAILTO;
     $("footMail").href = MAILTO; // 아래 "문의"를 눌러도 바로 메일 쓰기
     $("mailPlain").textContent = MAIL;
-    $("ver").textContent = `v${VERSION} Demo · 무료 · PC 전용`;
+    $("ver").textContent = `v${VERSION} · 무료 · PC 전용`;
     if (STORE_URL) {
       const d = $("download");
       d.href = STORE_URL; d.removeAttribute("download"); d.lastChild.textContent = " Chrome에 추가";

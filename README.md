@@ -9,9 +9,8 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white" alt="Chrome Extension" />
   <img src="https://img.shields.io/badge/Manifest-V3-34A853" alt="Manifest V3" />
-  <img src="https://img.shields.io/badge/version-1.7.5-3182F6" alt="version 1.7.5" />
+  <img src="https://img.shields.io/badge/version-1.7.6-3182F6" alt="version 1.7.6" />
   <img src="https://img.shields.io/github/license/joony06/iSubby?color=191F28" alt="License" />
-  <img src="https://img.shields.io/badge/status-Demo-F76707" alt="Demo" />
   <img src="https://img.shields.io/badge/for-SKKU_GBA_(일부_학생)-0F6E46" alt="for SKKU GBA" />
 </p>
 
@@ -21,7 +20,7 @@
 
 **iSubby**는 학습용으로 만든 SRT 자막을 iCampus 강의 플레이어 위에 겹쳐 보여줍니다. 관리자가 올린 공유 자막은 수강생이 강의를 열기만 하면 자동으로 표시됩니다.
 
-> **데모 버전**: SKKU GBA 일부 학생을 위한 데모입니다. 공유 자막은 Business Statistics, Introduction to Financial Accounting, Introduction to Microeconomics 과목에만 제공되며, 기능은 예고 없이 바뀔 수 있습니다.
+> SKKU GBA 일부 학생을 위해 만들었습니다. 공유 자막은 Business Statistics, Introduction to Financial Accounting, Introduction to Microeconomics 과목에만 제공됩니다.
 
 이름은 iCampus의 **i**와 subtitle을 귀엽게 부른 **Subby**를 합친 것입니다.
 
@@ -36,6 +35,7 @@
 - **전체화면 지원**: 플레이어 전체화면에서도 자막 유지
 - **인코딩 자동 판별**: UTF-8과 EUC-KR(CP949) SRT 모두 읽음
 - **자막 목록 패널**: 플레이어 오른쪽에 전체 자막을 대본처럼 표시. 지금 줄 하이라이트, 줄을 누르면 그 시점으로 이동, 키워드 검색
+- **문의·자막 오류 신고**: 팝업 맨 아래 "문의"(버전·강의 ID 자동 입력), 자막 목록의 "오류 신고"(지금 줄의 시간·자막 자동 입력)
 - **상황별 안내**: 플레이어를 못 찾거나 강의를 식별하지 못하면 이유와 해결 방법을 알려줌
 - **강의 목록에 자막 표시**: Business Statistics, Financial Accounting, Microeconomics 과목의 강의콘텐츠 페이지에서 자막이 있는 강의에 "자막 ✓" 표시
 - **분반 연결**: 같은 녹화본인데 분반마다 영상 ID가 다른 강의도 다른 분반에서 올린 자막을 찾아 적용
@@ -205,6 +205,7 @@ iSubby/
 
 ## 버전 기록
 
+- **1.7.6**: 팝업 문의 링크, 자막 목록의 오류 신고 버튼, 데모 표시 제거
 - **1.7.5**: 팝업 로고 옆 DEMO 표시, 맨 아래에 현재 버전 표시
 - **1.7.4**: SRT 한꺼번에 올리기에서 여러 번 나눠 고른 파일이 목록에 쌓이도록, 목록 비우기 버튼 추가
 - **1.7.3**: SRT 한꺼번에 올리기에 기본 "파일 선택" 버튼이 겹쳐 보이던 문제 수정

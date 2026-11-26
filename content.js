@@ -341,6 +341,7 @@
     panel.className = "srt-ov-panel";
     panel.innerHTML =
       '<div class="srt-ov-ph"><b>자막 목록</b><span class="srt-ov-count"></span>' +
+      '<button type="button" class="srt-ov-report" title="지금 강조된 줄의 오류를 메일로 알려주세요. 다른 줄은 먼저 그 줄을 눌러 이동한 뒤 신고하면 돼요.">오류 신고</button>' +
       '<button type="button" class="srt-ov-x" title="닫기 (T)">✕</button></div>' +
       '<div class="srt-ov-search"><input type="search" placeholder="자막 검색" spellcheck="false" /></div>' +
       '<div class="srt-ov-list"></div>';
@@ -348,6 +349,7 @@
     searchEl = panel.querySelector("input");
     countEl = panel.querySelector(".srt-ov-count");
     panel.querySelector(".srt-ov-x").addEventListener("click", () => togglePanel(false));
+    panel.querySelector(".srt-ov-report").addEventListener("click", reportLine);
 
     // 패널 안에서 누른 키·클릭이 플레이어 단축키로 가지 않게
     for (const ev of ["keydown", "keyup", "keypress"]) panel.addEventListener(ev, (e) => {
@@ -365,6 +367,34 @@
       userScrollUntil = 0;
     });
     overlay.append(panelBtn, panel);
+  }
+
+  // 자막 오류 신고: 지금 강조된 줄의 정보를 넣은 메일 쓰기 창을 엶 (이용자가 보내기를 눌러야 전달됨)
+  function reportLine() {
+    const c = cues[activeIdx];
+    const t = c ? c.start + offset : (video ? video.currentTime : 0);
+    const mail = ["joon2.1022", "gmail.com"].join("@");
+    const body = [
+      "어떤 점이 틀렸는지 적어 주세요:",
+      "",
+      "",
+      "----- 아래는 자동으로 들어간 정보예요 -----",
+      `강의 ID: ${contentId}`,
+      `영상 시간: ${fmtTime(t)}`,
+      `자막: ${c ? c.text.replace(/\s*\n\s*/g, " ") : "(이 시간에 나오는 자막 없음)"}`,
+      `자막 종류: ${source === "local" ? "내 파일" : "공유 자막"}`,
+      `iSubby v${chrome.runtime.getManifest().version}`,
+    ].join("\n");
+    const a = document.createElement("a");
+    a.href = `mailto:${mail}?subject=${encodeURIComponent(`[iSubby 자막 오류] ${fmtTime(t)}`)}&body=${encodeURIComponent(body)}`;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.click();
+    // 메일 앱이 안 열리는 환경을 위해 같은 내용을 복사해 둠
+    navigator.clipboard.writeText(`받는 사람: ${mail}\n\n${body}`).then(
+      () => flash("메일 창이 안 열리면, 신고 내용이 복사돼 있으니 메일에 붙여넣어 주세요"),
+      () => {}
+    );
   }
 
   function buildList() {

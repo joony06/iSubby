@@ -82,6 +82,11 @@ video::cue {
 .srt-ov-ph { display: flex; align-items: center; gap: 8px; padding: 12px 12px 8px 16px; }
 .srt-ov-ph b { font-size: 15px; font-weight: 700; }
 .srt-ov-count { font-size: 12px; color: #9e9ea4; flex: 1; }
+.srt-ov-report {
+  border: 0; background: rgba(255, 255, 255, 0.08); color: #c9c9cf; cursor: pointer;
+  height: 26px; padding: 0 10px; border-radius: 8px; font: 600 12px/1 inherit; white-space: nowrap;
+}
+.srt-ov-report:hover { background: rgba(255, 255, 255, 0.16); color: #fff; }
 .srt-ov-x {
   border: 0; background: transparent; color: #9e9ea4; cursor: pointer;
   width: 28px; height: 28px; border-radius: 8px; font-size: 14px;

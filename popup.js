@@ -314,5 +314,16 @@ async function init() {
 
 init();
 
-// 맨 아래 저작권 줄에 현재 버전 표시 (manifest에서 읽어서 업데이트마다 자동으로 바뀜)
-document.getElementById("verText").textContent = "Demo v" + chrome.runtime.getManifest().version;
+// 맨 아래 저작권 줄: 현재 버전 (manifest에서 읽어서 업데이트마다 자동으로 바뀜)
+const APP_VER = chrome.runtime.getManifest().version;
+document.getElementById("verText").textContent = "v" + APP_VER;
+
+// 문의: 버전과 지금 보던 강의 ID를 미리 넣은 메일 쓰기 창
+document.getElementById("contactLink").addEventListener("click", (e) => {
+  e.preventDefault();
+  const mail = ["joon2.1022", "gmail.com"].join("@");
+  const id = lastStatus && lastStatus.ok && lastStatus.contentId;
+  const body = ["문의 내용을 적어 주세요:", "", "", "----- 아래는 자동으로 들어간 정보예요 -----",
+    `iSubby v${APP_VER}`, id ? `보던 강의 ID: ${id}` : "보던 강의: 없음"].join("\n");
+  chrome.tabs.create({ url: `mailto:${mail}?subject=${encodeURIComponent(`[iSubby 문의] v${APP_VER}`)}&body=${encodeURIComponent(body)}` });
+});
