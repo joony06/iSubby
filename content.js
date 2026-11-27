@@ -23,7 +23,11 @@
   // 자막 목록 패널
   let panel = null, panelBtn = null, listEl = null, searchEl = null, countEl = null;
   let panelOpen = false, rows = [], activeIdx = -1, listDirty = true, userScrollUntil = 0;
-  let aiNoticeSeen = true; // 저장값을 읽기 전에는 안내를 띄우지 않음
+  // AI 자막 안내 카드: 공유 자막 패널을 연 횟수가 3번이 될 때까지만 보여줌 ("알겠어요"를 누르면 바로 끝)
+  const AI_NOTICE_MAX = 3;
+  let aiNotice = null; // { n: 보여준 횟수, done: 알겠어요 누름 } — 읽기 전에는 띄우지 않음
+  let aiNoticeNow = false; // 이번에 패널을 열었을 때 보여주는 중인지
+  chrome.storage.local.get("aiNotice").then((d) => { aiNotice = { n: 0, done: false, ...(d.aiNotice || {}) }; });
 
   // ---------- 콘텐츠 식별 ----------
   function detectContentId() {
@@ -357,11 +361,10 @@
     panel.querySelector(".srt-ov-report").addEventListener("click", reportLine);
     // AI 자막 안내: 공유 자막을 처음 볼 때 한 번만
     panel.querySelector(".srt-ov-notice button").addEventListener("click", () => {
-      aiNoticeSeen = true;
-      chrome.storage.local.set({ aiNoticeSeen: true });
+      aiNoticeNow = false;
+      if (aiNotice) { aiNotice.done = true; chrome.storage.local.set({ aiNotice }); }
       updateAiHint();
     });
-    chrome.storage.local.get("aiNoticeSeen").then((d) => { aiNoticeSeen = !!d.aiNoticeSeen; updateAiHint(); });
 
     // 패널 안에서 누른 키·클릭이 플레이어 단축키로 가지 않게
     for (const ev of ["keydown", "keyup", "keypress"]) panel.addEventListener(ev, (e) => {
@@ -409,7 +412,7 @@
   function updateAiHint() {
     if (!panel) return;
     panel.classList.toggle("is-shared", source === "shared");
-    panel.querySelector(".srt-ov-notice").hidden = source !== "shared" || aiNoticeSeen;
+    panel.querySelector(".srt-ov-notice").hidden = source !== "shared" || !aiNoticeNow;
   }
 
   function buildList() {
@@ -490,6 +493,10 @@
     panelOpen = typeof force === "boolean" ? force : !panelOpen;
     overlay.classList.toggle("panel-open", panelOpen);
     if (panelOpen) {
+      // 공유 자막 패널을 열 때마다 한 번씩 세서, 3번째까지만 안내를 보여줌
+      aiNoticeNow = source === "shared" && !!aiNotice && !aiNotice.done && aiNotice.n < AI_NOTICE_MAX;
+      if (aiNoticeNow) { aiNotice.n++; chrome.storage.local.set({ aiNotice }); }
+      updateAiHint();
       activeIdx = -1;
       userScrollUntil = 0;
       if (video) updateActiveRow(video.currentTime - offset);
