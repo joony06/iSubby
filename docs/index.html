@@ -171,7 +171,7 @@
     .subnav a:hover { color: var(--text); }
     .subnav a.on { color: #fff; background: var(--blue); border-color: var(--blue); }
     @media (max-width: 720px) { .subnav-in { padding: 6px 14px; } }
-    section, #top { scroll-margin-top: 72px; } .feat { scroll-margin-top: 120px; } .faq-group { scroll-margin-top: 150px; }
+    section, #top { scroll-margin-top: 72px; } .feat { scroll-margin-top: 120px; } .faq-group { scroll-margin-top: 80px; }
     .contact-card { text-align: center; padding: 36px 24px; border-radius: 20px; background: var(--card); border: 1px solid var(--line); }
     .contact-card h2 { margin-top: 6px; }
     .contact-card .lead { max-width: 480px; margin-left: auto; margin-right: auto; }
@@ -252,12 +252,6 @@
        <a href="#use-video">강의 영상에서</a>
        <a href="#use-list">강의콘텐츠 페이지에서</a>
        <a href="#use-popup">툴바 버튼</a>
-     </div>
-     <div class="subnav-in" data-for="faq">
-       <a href="#faq-install">설치·업데이트</a>
-       <a href="#faq-subs">자막이 안 뜨거나 틀릴 때</a>
-       <a href="#faq-zip">zip으로 설치했을 때</a>
-       <a href="#faq-etc">그 밖에</a>
      </div>
    </div>
   </nav>
@@ -602,7 +596,7 @@
     const targets = tocLinks.map((a) => document.querySelector(a.getAttribute("href"))).filter(Boolean);
     const navEl = $("toc");
     const subnav = $("subnav");
-    // 세부 메뉴: 사용법 칸(강의 영상에서 · 강의콘텐츠 페이지에서 · 툴바 버튼), 자주 묻는 질문 칸(질문 묶음)
+    // 세부 메뉴: 사용법 칸(강의 영상에서 · 강의콘텐츠 페이지에서 · 툴바 버튼)
     const subGroups = [...subnav.querySelectorAll(".subnav-in")].map((el) => {
       const links = [...el.querySelectorAll("a")];
       return { el, id: el.dataset.for, links, targets: links.map((a) => document.querySelector(a.getAttribute("href"))) };
@@ -614,7 +608,7 @@
       for (const t of targets) if (t.getBoundingClientRect().top + window.scrollY <= y) cur = t;
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = targets[targets.length - 1];
       tocLinks.forEach((a) => a.classList.toggle("on", !!cur && a.getAttribute("href") === "#" + cur.id));
-      // 사용법·자주 묻는 질문 칸에 있을 때만 그 칸의 세부 메뉴를 보여줌
+      // 사용법 칸에 있을 때만 세부 메뉴를 보여줌
       const g = cur && subGroups.find((x) => x.id === cur.id);
       subnav.hidden = !g;
       subGroups.forEach((x) => (x.el.hidden = x !== g));
